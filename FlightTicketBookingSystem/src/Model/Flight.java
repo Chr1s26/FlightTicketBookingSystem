@@ -1,30 +1,56 @@
 package Model;
 
+import java.util.List;
+
 public class Flight {
 	
-	private String flightname;
-	private String FlightNumber;
-	private Seat[] seat;
+	private int id;
+	private String name;
+	private String number;
+	private List<Seat> seats;
 	
-	public Flight(String flightname,String FlightNumber, Seat[] seat) {
-		this.flightname = flightname;
-		this.FlightNumber = FlightNumber;
-		this.seat = seat;
+	public Flight(int id, String name,String number, List<Seat> seats) {
+		this.id = id;
+		this.name = name;
+		this.number = number;
+		this.seats = seats;
 	}
 
-	public String getFlightname() {
-		return flightname;
+	public Flight() {
 	}
 
-	public String getFlightNumber() {
-		return FlightNumber;
+
+	public List<Seat> getSeats() {
+		return seats;
 	}
+
 	
-	public boolean equalFlight(Flight flight) {
-		if(flight == null) {
-			return false;
-		}
-		return this.flightname.equals(flight.getFlightname());
+	public void setSeats(List<Seat> seats) {
+		this.seats = seats;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 	
 

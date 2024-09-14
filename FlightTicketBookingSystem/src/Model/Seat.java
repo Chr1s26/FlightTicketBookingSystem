@@ -5,6 +5,7 @@ public class Seat {
 	private int id;
 	private String name;
 	private String seatType;
+	private Flight flight;
 	
 	public Seat() {
 		
@@ -33,6 +34,14 @@ public class Seat {
 	}
 	public void setSeatType(String seatType) {
 		this.seatType = seatType;
+	}
+
+	public Flight getFlight() {
+		return flight;
+	}
+
+	public void setFlight(Flight flight) {
+		this.flight = flight;
 	}
 	
 

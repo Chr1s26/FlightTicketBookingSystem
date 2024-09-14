@@ -10,8 +10,11 @@ import util.Constant;
 
 public class FlightDaoImpl extends AbstractDao<Flight> {
 
+	private final SeatDaoImpl seatDaoImpl;
+	
 	public FlightDaoImpl(ConnectionFactory connectionFactory) {
 		super(connectionFactory);
+		this.seatDaoImpl = new SeatDaoImpl(connectionFactory);
 	}
 
 	@Override
@@ -21,8 +24,12 @@ public class FlightDaoImpl extends AbstractDao<Flight> {
 
 	@Override
 	protected Flight convertToEntity(ResultSet resultSet) throws SQLException {
-		
-		return null;
+		Flight flight = new Flight();
+		flight.setId(resultSet.getInt("id"));
+		flight.setName(resultSet.getString("name"));
+		flight.setNumber(resultSet.getString("number"));
+		flight.setSeats(this.seatDaoImpl.getAllByFlightId(flight.getId()));
+		return flight;
 	}
 	
 	
