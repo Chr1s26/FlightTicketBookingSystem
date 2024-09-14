@@ -1,34 +1,30 @@
 package Dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import Database.ConnectionFactory;
 import Model.Airport;
+import util.Constant;
 
-public class AirportDaoImpl implements AirpotDao {
+public class AirportDaoImpl extends AbstractDao<Airport> {
 
-	  Airport[] airportarr = {
-			 	new Airport(1,"JFK"),
-	            new Airport(2,"LAX"),
-	            new Airport(3,"Heathrow"),
-	            new Airport(4,"Charles de Gaulle"),
-	            new Airport(5,"Tokyo Haneda"),
-	            new Airport(6,"Dubai International"),
-	            new Airport(7,"Singapore Changi"),
-	            new Airport(8,"Hong Kong International"),
-	            new Airport(9,"Sydney Kingsford Smith"),
-	            new Airport(10,"Toronto Pearson")};
-	 
-	 @Override
-	 public Airport[] getAirport() {
-		 return airportarr;
-	 }
+	public AirportDaoImpl(ConnectionFactory connectionFactory) {
+		super(connectionFactory);
+	}
 
 	@Override
-	public Airport getAirportByName(String name) {
-		for (Airport airport : airportarr) {
-			if(airport.getName().equalsIgnoreCase(name)) {
-				return airport;
-			}
-		}
-		return null;
+	protected String getTableName() {
+		return Constant.Table.AIRPORT;
 	}
+
+	@Override
+	protected Airport convertToEntity(ResultSet resultSet) throws SQLException {
+		Airport airport = new Airport(resultSet.getInt("id"), resultSet.getString("name"));
+		return airport;
+	}
+
+	 
+	
 
 }

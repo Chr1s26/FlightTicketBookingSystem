@@ -1,34 +1,32 @@
 package Dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import Database.ConnectionFactory;
 import Model.Flight;
 import Model.Seat;
+import util.Constant;
 
-public class FlightDaoImpl implements FlightDao {
-	
-	private SeatDao seatDao = new SeatDaoImpl();
-	Seat[] seats = seatDao.getAllSeats();
-	
-	private Flight[] flights = {
-			 new Flight("Flight 1", "FL123", seats),
-	         new Flight("Flight 2", "FL456", seats),
-	         new Flight("Flight 3", "FL876", seats)
-	};
+public class FlightDaoImpl extends AbstractDao<Flight> {
 
-	@Override
-	public Flight[] getAllFlights() {
-		return flights;
+	public FlightDaoImpl(ConnectionFactory connectionFactory) {
+		super(connectionFactory);
 	}
 
 	@Override
-	public Flight getFlightByFlightNumber(String number) {
-		for (Flight flight : flights) {
-            if (flight.getFlightNumber().equalsIgnoreCase(number)) {
-                return flight;
-            }
-        }
-        return null;
-    }
-	
+	protected String getTableName() {
+		return Constant.Table.FLIGHT;
 	}
+
+	@Override
+	protected Flight convertToEntity(ResultSet resultSet) throws SQLException {
+		
+		return null;
+	}
+	
+	
+	
+}
 
 	

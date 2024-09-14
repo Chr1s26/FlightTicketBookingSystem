@@ -32,6 +32,4 @@ public class FlightScheduleDaoImpl implements FlightScheduleDao{
         return null;
 	}
 
-	
-
 }

@@ -1,29 +1,30 @@
 package Dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import Database.ConnectionFactory;
 import Model.Customer;
+import util.Constant;
 
-public class CustomerDaoImpl implements CustomerDao {
-	
-	Customer[] customers = {
-			new Customer("John Doe"),
-            new Customer("Jane Smith")
-	};
+public class CustomerDaoImpl extends AbstractDao<Customer> {
 
-	@Override
-	public Customer[] getAllCustomers() {
-		return customers;
+	public CustomerDaoImpl(ConnectionFactory connectionFactory) {
+		super(connectionFactory);
 	}
 
 	@Override
-	public Customer getCustomerByName(String name) {
-		for (Customer customer : customers) {
-            if (customer.getCustomerName().equals(name)) {
-                return customer;
-            }
-        }
-        return null;
+	protected String getTableName() {
+		return Constant.Table.CUSTOMER;
+	}
+
+	@Override
+	protected Customer convertToEntity(ResultSet resultSet) throws SQLException {
+		Customer customer = new Customer(resultSet.getInt("id"), resultSet.getString("name"));
+		return customer;
 	}
 
 	
-
+	
+	
 }

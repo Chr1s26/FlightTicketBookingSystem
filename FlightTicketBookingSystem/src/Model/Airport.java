@@ -5,7 +5,9 @@ public class Airport {
 	private String name;
 	private int Id;
 
-	
+	public Airport() {
+		
+	}
 	public Airport(int id,String name) {
 		this.Id = id;
 		this.name = name;	
