@@ -76,6 +76,7 @@ public class RouteDaoImpl implements RouteDao {
 			preparedStatement.setInt(1, route.getArrivalAirport().getAirportId());
 			preparedStatement.setInt(2, route.getDepatureAirport().getAirportId());
 			preparedStatement.setInt(3, route.getDistance());
+			preparedStatement.setInt(4, route.getFlight().getFlightid());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -37,7 +37,9 @@ public class RouteDaoImpl implements RouteDao {
 				int dept = resultSet.getInt("dept_airportid");
 				Airport deptairport = airportdao.getAirportById(dept);
 				int distance = resultSet.getInt("distance");
-				routes.add(new Route(deptairport, arrivalairport, distance));
+				int flight = resultSet.getInt("flight_id");
+				Flight flight2 = flightDao.getFlightByFlightId(flight);
+				routes.add(new Route(deptairport, arrivalairport, distance, flight2));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -60,7 +62,9 @@ public class RouteDaoImpl implements RouteDao {
 				int dept = resultSet.getInt("dept_airportid");
 				Airport deptairport = airportdao.getAirportById(dept);
 				int distance = resultSet.getInt("distance");
-				route = new Route(deptairport, arrivalairport, distance);
+				int flight = resultSet.getInt("flight_id");
+				Flight flight2 = flightDao.getFlightByFlightId(flight);
+				route = new Route(deptairport, arrivalairport, distance,flight2);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,6 +80,7 @@ public class RouteDaoImpl implements RouteDao {
 			preparedStatement.setInt(1, route.getArrivalAirport().getAirportId());
 			preparedStatement.setInt(2, route.getDepatureAirport().getAirportId());
 			preparedStatement.setInt(3, route.getDistance());
+			preparedStatement.setInt(4, route.getFlight().getFlightid());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

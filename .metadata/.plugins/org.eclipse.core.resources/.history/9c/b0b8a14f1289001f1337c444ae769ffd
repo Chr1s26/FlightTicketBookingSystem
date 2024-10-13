@@ -19,6 +19,7 @@ public class Route {
 		this.depatureAirport = depature;
 		this.arrivalAirport = arrival;
 		this.distance = distance;
+		this.flight = flight;
 	}
 
 	public Airport getDepatureAirport() {
