@@ -1,11 +1,14 @@
 package Dao;
 
+import java.util.List;
+
 import Model.Flight;
 import Model.FlightSchedule;
 
 public interface FlightScheduleDao {
 
-	FlightSchedule[] getFlightSchedule();
-	FlightSchedule getFlightScheduleByFlight(Flight flight);
+	List<FlightSchedule> getFlightSchedule();
+	FlightSchedule getFlightScheduleById(int id);
+	void addFlightSchedule(FlightSchedule flightSchedule);
 
 }

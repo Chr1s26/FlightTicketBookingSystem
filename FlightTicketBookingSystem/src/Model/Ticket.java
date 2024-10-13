@@ -2,20 +2,23 @@ package Model;
 
 public class Ticket {
 
-	private int ticketId;
 	private FlightSchedule schedule;
 	private double ticketprice;
 	private Seat seat;
+	private Customer customer;
 	
-	public Ticket(int ticketId,FlightSchedule schedule, double ticketprice, Seat seat) {
-		this.ticketId = ticketId;
+	public Ticket(FlightSchedule schedule,Customer customer ,double ticketprice, Seat seat) {
 		this.schedule = schedule;
+		this.customer = customer;
 		this.ticketprice = ticketprice;
 		this.seat = seat;
 	}
-
-	public int getTicketId() {
-		return ticketId;
+	@Override
+	public String toString() {
+		return "Customer=" + customer + ", schedule=" + schedule + ", ticketprice=" + ticketprice + ", seat="
+				+ seat ;
 	}
+	
+	
 
 }

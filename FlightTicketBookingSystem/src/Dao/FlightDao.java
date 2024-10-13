@@ -1,9 +1,12 @@
 package Dao;
 
+import java.util.List;
+
 import Model.Flight;
 
 public interface FlightDao {
 
-	 Flight[] getAllFlights();
-	 Flight getFlightByFlightNumber(String number);
+	 List<Flight> getAllFlights();
+	 Flight getFlightByFlightId(int id);
+	 void addFlight(Flight flight);
 }
