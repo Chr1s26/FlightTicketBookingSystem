@@ -18,9 +18,17 @@ public class Customer {
 		return customerName;
 	}
 
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
 	@Override
 	public String toString() {
-		return "customerName=" + customerName ;
+		return "\nCustomerId = "+customerId+", customerName = " + customerName ;
 	}
 	
 	

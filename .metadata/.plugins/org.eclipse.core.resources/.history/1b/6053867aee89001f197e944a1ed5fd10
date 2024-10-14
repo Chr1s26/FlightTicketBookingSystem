@@ -1,0 +1,39 @@
+package Dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import Model.Seat;
+import Model.Ticket;
+
+public class TicketDaoImpl extends AbstractDao<Ticket> {
+	
+	private FlightScheduleDaoImpl flightScheduleDao = new FlightScheduleDaoImpl();
+
+	@Override
+	public String gettableName() {
+		return "TICKETS";
+	}
+
+	@Override
+	public Ticket convertToObject(ResultSet resultset) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	void add(Ticket ticket) {
+		String sql = "INSERT INTO TICKETS (schedule_id,customer_id,seat_id,price) VALUES (?,?,?,?)";
+		try(Connection connection = connectionFactory.createConnection()) {
+			PreparedStatement prepareStatement = connection.prepareStatement(sql);
+			prepareStatement.setInt(1,ticket.getSchedule().getScheduleid());
+			prepareStatement.setInt(2,ticket.getCustomer().getCustomerId());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+}
+
+	

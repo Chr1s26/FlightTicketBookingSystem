@@ -1,0 +1,13 @@
+package Dao;
+
+import java.util.List;
+
+public abstract class AbstractDao<T> {
+	
+	public abstract String gettableName();
+	
+	public List<T> getAll(){
+		String query = "SELECT * FROM ";
+	}
+
+}

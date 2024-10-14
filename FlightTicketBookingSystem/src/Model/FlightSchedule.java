@@ -90,7 +90,7 @@ public class FlightSchedule {
 
 	@Override
 	public String toString() {
-		return  "\n"+flight + "\n route=" + route + "\n depature time =" + deptTime + ", arrival time=" + arrivalTime +"created At "+createdAt;
+		return  "\n\nScheduleid= "+scheduleid+","+flight + route + "\nDepature time =" + deptTime + ", Arrival time=" + arrivalTime +"Created At "+createdAt;
 	}
 	
 	

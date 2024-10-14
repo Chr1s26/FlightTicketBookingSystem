@@ -63,8 +63,8 @@ public class Route {
 
 	@Override
 	public String toString() {
-		return "Route [routeId=" + routeId + ", depatureAirport=" + depatureAirport + ", arrivalAirport="
-				+ arrivalAirport + ",distance is,"+distance+"]";
+		return "\nRoute [routeId=" + routeId + ", depatureAirport=" + depatureAirport + ", arrivalAirport="
+				+ arrivalAirport + ",distance="+distance+"]";
 	}
 
 	
