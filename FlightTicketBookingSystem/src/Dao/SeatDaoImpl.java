@@ -3,6 +3,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import Model.Flight;
 import Model.Seat;
 
@@ -48,6 +51,8 @@ public class SeatDaoImpl extends SeatDao {
 		
 	}
 
+
+
 	@Override
 	public boolean isAvailableSeat(int schedule_id, int seat_id) {
 		int seatCount = -1;
@@ -68,7 +73,35 @@ public class SeatDaoImpl extends SeatDao {
 		return seatCount == 0;
 	}
 
+	@Override
+	public List<Seat> getAvailableSeatsBySchedule(int scheduleId) {
+		List<Seat> seatList = new ArrayList<>();
+		try {
+			String query = "SELECT seats.* \n" +
+					"FROM flights\n" +
+					"JOIN seats ON flights.id = seats.flight_id\n" +
+					"LEFT JOIN tickets ON tickets.seat_id = seats.id\n" +
+					"JOIN schedules ON schedules.flight_id = flights.id\n" +
+					"WHERE tickets.seat_id IS NULL\n" +
+					"AND schedules.id = ?;\n";
+			Connection connection = this.connectionFactory.createConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, scheduleId);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()){
+				Seat seat = this.convertToObject(resultSet);
+				seatList.add(seat);
+			}
+		}catch (SQLException e){
+			System.out.println(e.getMessage());
+		}finally {
+			this.connectionFactory.closeConnection();
+		}
+
+		return seatList;
 	}
+
+}
 
 
 

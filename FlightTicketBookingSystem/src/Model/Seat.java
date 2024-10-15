@@ -98,6 +98,13 @@ public class Seat {
 				+ ", isAvailable=" + isAvailable+"Flight number is "+this.flight+"SeatNumber="+SeatNumber;
 	}
 	
-	
+	public String[] toArray(){
+		String[] dataArr = new String[4];
+		dataArr[0] = this.getSeatid()+"";
+		dataArr[1] = this.getSeatNumber();
+		dataArr[2] = this.getSeatType();
+		dataArr[3] = this.calculatePrice()+"";
+		return dataArr;
+	}
 
 }

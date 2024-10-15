@@ -43,16 +43,18 @@ public class CustomerDaoImpl extends CustomerDao {
 	}
 
 	@Override
-	public int findCustomerByName(String name) {
+	public Customer findCustomerByName(String name) {
+		Customer customer = null;
 		try {
-		String query = "SELECT * FROM "+this.getTableName()+" WHERE name = ?";
-		Connection connection = connectionFactory.createConnection();
+		String query = "SELECT * FROM "+this.getTableName()+" WHERE name LIKE ?";
+		Connection connection = this.connectionFactory.createConnection();
 		PreparedStatement prepareStatement = connection.prepareStatement(query);
 		prepareStatement.setString(1, name);
 		ResultSet resultSet = prepareStatement.executeQuery();
 		if(resultSet.next()) {
 			int customerid = resultSet.getInt("id");
-			return customerid;
+			customer = this.getById(customerid);
+			return customer;
 		}
 		}catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
@@ -60,7 +62,7 @@ public class CustomerDaoImpl extends CustomerDao {
 		finally {
 			this.connectionFactory.closeConnection();
 		}
-		return 0;
+		return customer;
 		
 	}
 
