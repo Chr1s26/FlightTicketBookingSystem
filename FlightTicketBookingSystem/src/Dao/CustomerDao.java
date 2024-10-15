@@ -1,14 +1,10 @@
 package Dao;
 
-import java.sql.SQLException;
-import java.util.List;
 
 import Model.Customer;
 
-public interface CustomerDao {
+public abstract class CustomerDao extends AbstractDao<Customer> {
 	
-	 void registerCustomer(Customer customer);
-	 List<Customer> getAllCustomers() throws SQLException;
-	 Customer getCustomerByName(String name);
+	public abstract int findCustomerByName(String name);
 	 
 }

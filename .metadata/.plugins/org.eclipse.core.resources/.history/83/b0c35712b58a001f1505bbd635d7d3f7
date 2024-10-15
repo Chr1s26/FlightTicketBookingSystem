@@ -1,0 +1,9 @@
+package Dao;
+
+import Model.Ticket;
+
+public interface TicketDao extends AbstractDao<Ticket> {
+
+	public abstract void cancelbooking();
+
+}

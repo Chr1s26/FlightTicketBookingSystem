@@ -16,7 +16,11 @@ public class PgSqlConnectionFactory implements ConnectionFactory{
         return this.connection;
     }
     
-    public void closeConnection() throws SQLException {
-     this.connection.close();
+    public void closeConnection() {
+    	try {
+    		this.connection.close();
+    	}catch (SQLException e) {
+			System.out.print(e.getMessage());
+		}
     }
 }

@@ -1,0 +1,48 @@
+package Dao;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import Model.Flight;
+import Model.Seat;
+
+public class SeatDaoImpl extends AbstractDao<Seat> {
+	
+	private FlightDaoImpl flightDao = new FlightDaoImpl();
+
+	@Override
+	public String getTableName() {
+		return "SEATS";
+	}
+
+	@Override
+	public Seat convertToObject(ResultSet resultset) {
+		Seat seat = null;
+		try {
+		int id = resultset.getInt("id");
+		String seatType = resultset.getString("seat_type");
+		int flightid = resultset.getInt("flight_id");
+		Flight flight = flightDao.getById(flightid);
+		String seatNumber = resultset.getString("name");
+		seat = new Seat(id, seatType, flight, seatNumber);}
+		catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+		return seat;
+	}
+
+	@Override
+	public String getInsertQuery() {
+		return "INSERT INTO SEATS(seat_type,flight_id,name) VALUES(?,?,?)";
+	}
+
+	@Override
+	public void prepareParams(PreparedStatement preparedStatement, Seat seat) {
+		preparedStatement.setString(1,seat.getSeatType());
+		preparedStatement.setInt(2, seat.getFlight().getFlightid());
+		preparedStatement.setString(3, seat.getSeatNumber());
+	}
+
+	}
+
+
+

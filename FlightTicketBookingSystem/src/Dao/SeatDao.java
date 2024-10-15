@@ -1,13 +1,10 @@
 package Dao;
 
-import java.util.List;
 
 import Model.Seat;
 
-public interface SeatDao {
+public abstract class SeatDao extends AbstractDao<Seat> {
 
-	 List<Seat> getAllSeats();
-	 Seat getSeatById(int seatId);
-	 void addSeat(Seat seat);
+	public abstract boolean isAvailableSeat(int schedule_id, int seat_id);
 
 }

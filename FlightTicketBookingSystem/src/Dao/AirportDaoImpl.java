@@ -1,6 +1,5 @@
 package Dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,28 +8,35 @@ import Model.Airport;
 public class AirportDaoImpl extends AbstractDao<Airport> {
 	
 	@Override
-	public void add(Airport airport) {
-		String sql = "INSERT INTO AIRPORTS";
-		try(Connection connection = connectionFactory.createConnection()) {
-			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, airport.getName());
-			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public String gettableName() {
+	public String getTableName() {
 		return "AIRPORTS";
 	}
 
 	@Override
-	public Airport convertToObject(ResultSet resultset) throws SQLException {
+	public Airport convertToObject(ResultSet resultset)  {
+		Airport airport = null;
+		try {
 		int airportId = resultset.getInt("id");
 		String airportName = resultset.getString("name");
-		Airport airport = new Airport(airportId,airportName);
+		airport = new Airport(airportId,airportName);}
+		catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
 		return airport;
+	}
+
+	@Override
+	public String getInsertQuery() {
+		return "INSERT INTO AIRPORTS (name) VALUES (?)";
+	}
+
+	@Override
+	public void prepareParams(PreparedStatement preparedStatement, Airport object) {
+		try {
+			preparedStatement.setString(1, object.getName());
+		} catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
 	}
 
 

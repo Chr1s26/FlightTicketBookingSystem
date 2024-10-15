@@ -1,10 +1,12 @@
 package Dao;
 
+import java.util.List;
+
 import Model.Ticket;
 
-public interface TicketDao {
+public abstract class TicketDao extends AbstractDao<Ticket> {
 
-	 Ticket[] getAllTickets();
-	 Ticket getTicketById(int id);
+	public abstract void delete(int id) ;
+	public abstract List<Ticket> findticketByCustomerId(int id);
 
 }

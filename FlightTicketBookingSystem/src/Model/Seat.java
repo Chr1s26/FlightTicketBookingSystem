@@ -4,7 +4,7 @@ public class Seat {
 	
 	private int seatid;
 	private String SeatNumber;
-	private String seatType;
+	private String seatType = "economy";
 	private double seatPrice;
 	private boolean isAvailable;
 	private Flight flight;
@@ -67,11 +67,35 @@ public class Seat {
 	public void setSeatPrice(double seatPrice) {
 		this.seatPrice = seatPrice;
 	}
+	
+	public double calculatePrice() {
+		if(this.isFirstClass()) {
+			return 500;
+		}else if(this.isBusiness()) {
+			return 300;
+		}else if(this.isEconomy()) {
+			return 100;
+		}else {
+			return 0;
+		}
+	}
+
+	private boolean isEconomy() {
+		return this.seatType.equalsIgnoreCase("economy");
+	}
+
+	private boolean isBusiness() {
+		return this.seatType.equalsIgnoreCase("business");
+	}
+
+	private boolean isFirstClass() {
+		return this.seatType.equalsIgnoreCase("first class");
+	}
 
 	@Override
 	public String toString() {
-		return "SeatNumber=" + SeatNumber + ", seatType=" + seatType 
-				+ ", isAvailable=" + isAvailable+"Flight number is "+this.flight;
+		return "SeatId=" + seatid + ", seatType=" + seatType 
+				+ ", isAvailable=" + isAvailable+"Flight number is "+this.flight+"SeatNumber="+SeatNumber;
 	}
 	
 	

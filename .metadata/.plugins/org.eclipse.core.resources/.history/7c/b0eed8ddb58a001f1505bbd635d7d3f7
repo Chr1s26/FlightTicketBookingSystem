@@ -1,0 +1,12 @@
+package Dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import Model.Customer;
+
+public abstract class CustomerDao extends AbstractDao<Customer> {
+	
+	public abstract int findCustomerByName(String name);
+	 
+}
