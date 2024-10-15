@@ -60,7 +60,7 @@ public class CustomerDaoImpl extends CustomerDao {
 		finally {
 			this.connectionFactory.closeConnection();
 		}
-		return 0;
+		return null;
 		
 	}
 

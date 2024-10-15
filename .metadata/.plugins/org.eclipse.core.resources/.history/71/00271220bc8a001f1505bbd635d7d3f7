@@ -35,7 +35,7 @@ public class BookingService extends BaseService {
 		int customerid = customerDao.findCustomerByName(name);
 		System.out.println(ticketdao.findticketByCustomerId(customerid));
 		System.out.println("Which booking do you want to delete");
-		int id = Integer.parseInt(bufferedReader.readLine()) ;
+		int id = Integer.parseInt(bufferedReader.readLine());
 		ticketdao.delete(id);
 		System.out.print("Booking deleted successfully");
 	}

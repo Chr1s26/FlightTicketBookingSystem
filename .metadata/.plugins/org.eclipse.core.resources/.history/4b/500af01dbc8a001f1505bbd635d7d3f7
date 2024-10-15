@@ -22,7 +22,6 @@ public class FlightTest {
 			System.out.println("Choose the option");
 			System.out.println("1. Book a Ticket");
 			System.out.println("2. Show All Routes");
-			System.out.println("3. Cancel Book ");
 			System.out.println("0. Quit");
 			
 			choice = Integer.parseInt(bufferedReader.readLine());
@@ -30,7 +29,6 @@ public class FlightTest {
 			switch (choice) {
 			case 1: bookingService.book(); break;
 			case 2: routeService.showallRoute(); break;
-			case 3 : bookingService.cancelbook(); break;
 			default: break;
 			}
 			
