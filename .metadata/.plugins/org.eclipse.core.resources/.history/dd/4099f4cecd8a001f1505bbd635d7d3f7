@@ -1,0 +1,23 @@
+package view;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JFrame;
+
+public class BaseWindow {
+	public JFrame baseWindow;
+	private String title;
+	
+	public BaseWindow(String title) {
+		this.title = title;
+		initializeBaseFrame();
+	}
+	
+	private void initializeBaseFrame() {
+		this.baseWindow = new JFrame(this.title);
+		this.baseWindow.setLayout(new BorderLayout());
+		this.baseWindow.setLocation(200,300);
+		this.baseWindow.setSize(400,400);
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+}

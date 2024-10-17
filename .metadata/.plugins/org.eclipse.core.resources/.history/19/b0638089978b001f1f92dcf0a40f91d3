@@ -1,0 +1,35 @@
+package view;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import Dao.CustomerDaoImpl;
+
+public class CustomerListingPage extends BaseWindow {
+	
+	private CustomerDaoImpl customerDao;
+	private String[] columns = {"CustomerId","CustomerName"};
+	private JButton createButton;
+	private JButton updateButton;
+	private JButton deleteButton;
+	
+	public CustomerListingPage() {
+		customerDao = new CustomerDaoImpl();
+		this.createButton = new JButton("Create");
+		this.updateButton = new JButton("Update");
+		this.deleteButton = new JButton("Delete");
+		
+		this.baseWindow.add(createButton);
+		this.baseWindow.add(updateButton);
+		this.baseWindow.add(deleteButton);
+		
+		prepareBaseWindow();
+	}
+	
+	public void prepareBaseWindow() {
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Ticket Information");
+		this.baseWindow.setSize(800,400);
+		this.baseWindow.setVisible(true);
+	}
+}

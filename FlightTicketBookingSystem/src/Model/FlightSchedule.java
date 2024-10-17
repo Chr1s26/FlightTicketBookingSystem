@@ -93,5 +93,19 @@ public class FlightSchedule {
 		return  "\n\nScheduleid= "+scheduleid+","+flight + route + "\nDepature time =" + deptTime + ", Arrival time=" + arrivalTime +"Created At "+createdAt;
 	}
 	
+	public String[] toArray() {
+		String[] scheduleTableRow = new String[8];
+		scheduleTableRow[0] = this.scheduleid+"";
+		scheduleTableRow[1] = this.getFlight().getFlightname();
+		scheduleTableRow[2] = this.getFlight().getFlightNumber();
+		scheduleTableRow[3] = this.getRoute().getDepatureAirport().getName();
+		scheduleTableRow[4] = this.getRoute().getArrivalAirport().getName();
+		scheduleTableRow[5] = this.getDeptTime();
+		scheduleTableRow[6] = this.getArrivalTime();
+		scheduleTableRow[7] = this.getCreatedAt();
+		
+		return scheduleTableRow;
+	}
+	
 	
 }

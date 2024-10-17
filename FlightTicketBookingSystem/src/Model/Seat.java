@@ -16,10 +16,9 @@ public class Seat {
         this.flight = flight;
     }
 	
-	public Seat(String SeatNumber,String seattype,boolean isAvailable,Flight flight) {
+	public Seat(String seattype,Flight flight,String SeatNumber) {
 		this.SeatNumber = SeatNumber;
         this.seatType = seattype;
-        this.isAvailable = isAvailable;
         this.flight = flight;
     }
 	
@@ -98,6 +97,15 @@ public class Seat {
 				+ ", isAvailable=" + isAvailable+"Flight number is "+this.flight+"SeatNumber="+SeatNumber;
 	}
 	
+	public String[] toArray() {
+		String[] dataArr = new String[4];
+		dataArr[0] = this.getSeatid()+"";
+		dataArr[1] = this.getSeatNumber();
+		dataArr[2] = this.getSeatType();
+		dataArr[3] = this.calculatePrice()+"";
+		return dataArr;
+		
+	}
 	
 
 }

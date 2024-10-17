@@ -107,6 +107,27 @@ public class TicketDaoImpl extends TicketDao {
 		return tickets;
 	}
 
+	@Override
+	public void deleteTicket(int ticketId) {
+		try {
+			String query = "DELETE FROM tickets WHERE id = ?";
+			Connection connection = connectionFactory.createConnection();
+			PreparedStatement prepareStatement = connection.prepareStatement(query);
+			prepareStatement.setInt(1, ticketId);
+			int rowsAffected = prepareStatement.executeUpdate();
+	        
+	        if (rowsAffected > 0) {
+	            System.out.println("Ticket deleted successfully.");
+	        } else {
+	            System.out.println("No ticket found with the given ID.");
+	        }
+			}catch (SQLException e) {
+				System.out.print("SQL Exception for : "+e.getMessage());
+			}
+			finally {
+				this.connectionFactory.closeConnection();
+			}
+	}
 }
 
 	

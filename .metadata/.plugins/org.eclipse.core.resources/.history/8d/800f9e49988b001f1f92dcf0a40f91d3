@@ -1,0 +1,40 @@
+package Model;
+
+public class Customer {
+	
+	private String customerName;
+	private int customerId;
+	private String email;
+	
+	public Customer(int id, String name,String email) {
+		this.customerId = id;
+		this.customerName = name;
+	}
+	
+	public Customer(String name) {
+		this.customerName = name;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	@Override
+	public String toString() {
+		return "\nCustomerId = "+customerId+", customerName = " + customerName ;
+	}
+	
+	
+}

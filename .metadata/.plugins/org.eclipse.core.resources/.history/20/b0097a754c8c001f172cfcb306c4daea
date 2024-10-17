@@ -1,0 +1,13 @@
+package Dao;
+
+import java.util.List;
+
+import Model.Airport;
+import Model.Seat;
+
+public class AirportDao extends AbstractDao {
+
+	public abstract void updateAirport(Airport airport);
+	public abstract void deleteAirport(int airportId);
+
+}

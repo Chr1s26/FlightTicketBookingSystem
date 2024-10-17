@@ -32,8 +32,8 @@ public class BookingService extends BaseService {
 	public void cancelbook() throws IOException {
 		System.out.println("Please enter the customer name : ");
 		String name = bufferedReader.readLine();
-		int customerid = customerDao.findCustomerByName(name);
-		System.out.println(ticketdao.findticketByCustomerId(customerid));
+		Customer customer = customerDao.findCustomerByName(name);
+		System.out.println(ticketdao.findticketByCustomerId(customer.getCustomerId()));
 		System.out.println("Which booking do you want to delete");
 		int id = Integer.parseInt(bufferedReader.readLine()) ;
 		ticketdao.delete(id);

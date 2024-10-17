@@ -3,10 +3,10 @@ package Dao;
 import java.util.List;
 
 import Model.Flight;
+import Model.Flight;
 
-public interface FlightDao {
+public abstract class FlightDao extends AbstractDao<Flight>{
 
-	 List<Flight> getAllFlights();
-	 Flight getFlightByFlightId(int id);
-	 void addFlight(Flight flight);
+	public abstract void updateFlight(Flight flight);
+	public abstract void deleteFlight(int FlightId);
 }

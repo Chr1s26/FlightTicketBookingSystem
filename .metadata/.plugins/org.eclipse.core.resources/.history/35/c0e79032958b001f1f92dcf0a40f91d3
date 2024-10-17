@@ -1,0 +1,53 @@
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
+public class HomeView extends BaseWindow {
+	private JMenuBar homeMenu;
+	private JMenu customerMenu;
+	private JMenu flightScheduleMenu;
+	private JMenu ticketMenu;
+	private JMenuItem scheduleListing;
+	
+	public HomeView() {
+		this.initializeHomeViewComponent();
+		this.setTitle("Home View");
+		this.baseWindow.setVisible(true);
+	}
+	
+	public void initializeHomeViewComponent() {
+		
+		this.homeMenu = new JMenuBar();
+		this.customerMenu = new JMenu("Customer");
+		this.flightScheduleMenu = new JMenu("Flight Schedule");
+		this.ticketMenu = new JMenu("Ticket");
+		this.scheduleListing = new JMenuItem("Schedule Listing");
+		
+		this.homeMenu.add(this.customerMenu);
+		this.homeMenu.add(this.flightScheduleMenu);
+		this.homeMenu.add(this.ticketMenu);
+		
+		this.flightScheduleMenu.add(scheduleListing);
+		
+		this.addActionFlightScheduleMenu();
+		this.baseWindow.setJMenuBar(this.homeMenu);
+		
+	}
+	
+	public void addActionFlightScheduleMenu() {
+		this.scheduleListing.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ScheduleListingPage scheduleListingPage = new ScheduleListingPage();
+			}
+		});
+	}
+
+}

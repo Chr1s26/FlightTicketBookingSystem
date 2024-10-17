@@ -3,11 +3,11 @@ package Dao;
 import java.util.List;
 
 import Model.Airport;
+import Model.Seat;
 
-public interface AirportDao {
+public abstract class AirportDao extends AbstractDao<Airport> {
 
-	List<Airport> getAllAirport();
-	Airport getAirportById(int id);
-	void addAirport(Airport airport);
+	public abstract void updateAirport(Airport airport);
+	public abstract void deleteAirport(int airportId);
 
 }

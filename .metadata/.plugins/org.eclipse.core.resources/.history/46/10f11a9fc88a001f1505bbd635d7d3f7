@@ -1,0 +1,30 @@
+package view;
+
+import java.awt.BorderLayout;
+import java.util.List;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import Dao.FlightScheduleDaoImpl;
+import Model.FlightSchedule;
+
+public class ScheduleListingPage extends BaseWindow {
+	
+	private JTable scheduleDataTable;
+	private String[] columns = {"Id","Flight Name","Flight Number","Dept Airport","Arrival Airport","Dept Time","Arrival Time","Created At"};
+	private FlightScheduleDaoImpl flightScheduleDaoImpl;
+	private JScrollPane scrollPane;
+	
+	public ScheduleListingPage() {
+		super("Flight Schedule Listing");
+		this.flightScheduleDaoImpl = new FlightScheduleDaoImpl();
+		List<FlightSchedule> schedules = this.flightScheduleDaoImpl.getAll();
+		String[][] scheduleData = new String[3][8];
+		this.scheduleDataTable = new JTable(scheduleData,columns);
+		this.scrollPane = new JScrollPane(this.scheduleDataTable);
+		this.baseWindow.add(this.scrollPane,BorderLayout.CENTER);
+		this.baseWindow.setSize(800,400);
+		this.baseWindow.setVisible(true);
+	}
+}

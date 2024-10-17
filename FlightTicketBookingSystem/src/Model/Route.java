@@ -60,6 +60,10 @@ public class Route {
 	public int getRouteId() {
 		return routeId;
 	}
+	
+	public String getRouteInfo() {
+		return "Dept Location : "+this.depatureAirport.getName()+"To "+this.arrivalAirport.getName()+"("+this.distance+")";
+	}
 
 	@Override
 	public String toString() {
