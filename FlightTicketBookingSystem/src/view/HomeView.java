@@ -1,9 +1,7 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -68,7 +66,8 @@ public class HomeView extends BaseWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new AirportListingPage();
+				AirportListingPage airportListingPage = new AirportListingPage();
+				airportListingPage.call();
 				
 			}
 		});
@@ -80,6 +79,7 @@ public class HomeView extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			CustomerListingPage customerListingPage = new CustomerListingPage();
+			customerListingPage.call();
 			}
 		});
 	}
@@ -89,7 +89,8 @@ public class HomeView extends BaseWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			new	SeatListingPage(); 
+			SeatListingPage seatListingPage = new SeatListingPage();
+			seatListingPage.call();
 			}
 		});
 	}
@@ -101,7 +102,7 @@ public class HomeView extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TicketListingPage ticketListingPage = new TicketListingPage();
-				
+				ticketListingPage.call();
 			}
 		});
 	}

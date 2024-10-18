@@ -8,9 +8,8 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import Dao.CustomerDaoImpl;
 import Dao.SeatDaoImpl;
 import Model.Customer;
 import Model.Seat;
@@ -44,6 +43,10 @@ public class SeatListingPage extends BaseWindow {
 		this.addActionOnCreateButton();
 		this.addActionOnUpdateButton();
 		this.addActionOnDeleteButton();
+		
+	}
+	
+	public void call() {
 		prepareBaseWindow();
 	}
 	
@@ -70,17 +73,50 @@ public class SeatListingPage extends BaseWindow {
 		});
 	}
 	
+
 	public void addActionOnDeleteButton() {
-		this.deleteButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedRowIndex = getDataTableTemplate().getSelectedRow();
-				int seatId = Integer.parseInt(getSeatData()[selectedRowIndex][0]);
-				seatDao.deleteSeat(seatId);
+		 this.deleteButton.addActionListener(e -> handleDeleteAction());}
+	
+	private void handleDeleteAction() {
+		 
+		 int selectedRowIndex = getSelectedRow();
+
+		 if (selectedRowIndex == -1) {
+			 JOptionPane.showMessageDialog(baseWindow, "Please select a seat to delete.");
+			 return;
+		 }
+
+		 int seatId = getSeatIdFromSelectedRow(selectedRowIndex);
+
+		 if (confirmDeletion(seatId)) {
+			 deleteCustomerAndRefresh(seatId);
+			 baseWindow.dispose();
+		 }
+		}
+
+		private int getSelectedRow() {
+			return getDataTableTemplate().getSelectedRow();
+		}
+
+		private int getSeatIdFromSelectedRow(int rowIndex) {
+			return Integer.parseInt(getSeatData()[rowIndex][0]);
+		}
+
+		private boolean confirmDeletion(int seatId) {
+			int response = JOptionPane.showConfirmDialog(
+					baseWindow,
+					"Are you sure you want to delete customer with ID " + seatId + "?",
+					"Confirm Deletion",
+					JOptionPane.YES_NO_OPTION
+		 );
+			return response == JOptionPane.YES_OPTION;
+		}
+		
+		private void deleteCustomerAndRefresh(int seatId) {
+			 seatDao.deleteSeat(seatId);
+			 SeatListingPage seatListingPage = new SeatListingPage();
+			 seatListingPage.call();
 			}
-		});
-	}
 	
 	public String[][] getSeatData(){
 		List<Seat> seats = seatDao.getAll();

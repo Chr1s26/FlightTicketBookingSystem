@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Dao.AirportDaoImpl;
@@ -42,7 +43,7 @@ public class AirportListingPage extends BaseWindow {
 		this.addActionOnCreateButton();
 		this.addActionOnUpdateButton();
 		this.addActionOnDeleteButton();
-		prepareBaseWindow();
+		
 	}
 	
 	public void addActionOnCreateButton() {
@@ -51,7 +52,6 @@ public class AirportListingPage extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new AirportCreateFormPage();
-				
 			}
 		});
 	}
@@ -68,17 +68,53 @@ public class AirportListingPage extends BaseWindow {
 		});
 	}
 	
-	public void addActionOnDeleteButton() {
-		this.deleteButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedRowIndex = getDataTableTemplate().getSelectedRow();
-				int airportId = Integer.parseInt(getAirportData()[selectedRowIndex][0]);
-				airportDao.deleteAirport(airportId);
-			}
-		});
+	public void call() {
+		prepareBaseWindow();
 	}
+	
+	public void addActionOnDeleteButton() {
+		 this.deleteButton.addActionListener(e -> handleDeleteAction());}
+	
+	private void handleDeleteAction() {
+		 
+		 int selectedRowIndex = getSelectedRow();
+
+		 if (selectedRowIndex == -1) {
+			 JOptionPane.showMessageDialog(baseWindow, "Please select a airport to delete.");
+			 return;
+		 }
+
+		 int airportId = getairportIdFromSelectedRow(selectedRowIndex);
+
+		 if (confirmDeletion(airportId)) {
+			 deleteCustomerAndRefresh(airportId);
+			 baseWindow.dispose();
+		 }
+		}
+
+		private int getSelectedRow() {
+			return getDataTableTemplate().getSelectedRow();
+		}
+
+		private int getairportIdFromSelectedRow(int rowIndex) {
+			return Integer.parseInt(getAirportData()[rowIndex][0]);
+		}
+
+		private boolean confirmDeletion(int airportId) {
+			int response = JOptionPane.showConfirmDialog(
+					baseWindow,
+					"Are you sure you want to delete customer with ID " + airportId + "?",
+					"Confirm Deletion",
+					JOptionPane.YES_NO_OPTION
+		 );
+			return response == JOptionPane.YES_OPTION;
+		}
+		
+		private void deleteCustomerAndRefresh(int airportId) {
+			 airportDao.deleteAirport(airportId);
+			 AirportListingPage airportListingPage = new AirportListingPage();
+			 airportListingPage.call();
+			}
 	
 	public String[][] getAirportData(){
 		List<Airport> airports = airportDao.getAll();

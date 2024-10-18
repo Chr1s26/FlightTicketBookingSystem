@@ -38,12 +38,13 @@ public class CustomerUpdateForm extends BaseWindow {
 	
 	public void InitializeComponent(int customerId) {
 		this.customerDao = new CustomerDaoImpl();
+		Customer customer = customerDao.getById(customerId);
 		this.customerIdLabel = new JLabel("Customer ID : ");
 		this.customerIdValue = new JLabel(customerId+"");
 		this.customerNameLabel = new JLabel("Customer Name : ");
-		this.customerNameValue = new JTextField();
+		this.customerNameValue = new JTextField(customer.getCustomerName());
 		this.customerEmailLabel = new JLabel("Customer Email");
-		this.customerEmailValue = new JTextField();
+		this.customerEmailValue = new JTextField(customer.getEmail());
 		
 		this.updateButton = new JButton("Update");
 		this.cancelButton = new JButton("Cancel");
@@ -68,9 +69,15 @@ public class CustomerUpdateForm extends BaseWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Customer customer1 = customerDao.getById(customerId);
 				String name = customerNameValue.getText();
+				customerNameValue.setText(customer1.getCustomerName());
 				String email = customerEmailValue.getText();
+				customerEmailValue.setText(customer1.getEmail());
 				Customer customer = new Customer(customerId,name, email);
+				baseWindow.dispose();
+				CustomerListingPage customerListingPage = new CustomerListingPage();
+				customerListingPage.call();
 				customerDao.updateCustomer(customer);
 			}
 		});

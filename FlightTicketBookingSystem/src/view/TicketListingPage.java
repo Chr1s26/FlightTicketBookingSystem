@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Dao.TicketDaoImpl;
@@ -24,7 +25,6 @@ public class TicketListingPage extends BaseWindow{
 	public TicketListingPage() {
 		InitializeComponent();
 		this.createDataTable(getTicketData(), columns);
-		this.prepareBaseWindow();
 	}
 	
 	public void InitializeComponent() {
@@ -54,16 +54,46 @@ public class TicketListingPage extends BaseWindow{
 //		});
 //	}
 	
+	public void call() {
+		prepareBaseWindow();
+	}
+	
 	public void addActionOnDeleteButton() {
-		this.deleteButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedRowIndex = getDataTableTemplate().getSelectedRow();
-				int ticketId = Integer.parseInt(getTicketData()[selectedRowIndex][0]);
-				ticketDaoImpl.deleteTicket(ticketId);
-			}
-		});
+		this.deleteButton.addActionListener(e -> handleDeleteAction());}
+	
+	public void handleDeleteAction() {
+		int selectedRowIndex = getSelectedRow();
+		
+		if(selectedRowIndex == -1) {
+			JOptionPane.showMessageDialog(baseWindow, "Please select a ticket to delete ");
+			return;
+		}
+		
+		int ticketId = getTicketIdFormSelectedRow(selectedRowIndex);
+		
+		if(ConfirmDeletion(ticketId)) {
+			deleteTicketAndRefresh(ticketId);
+			baseWindow.dispose();
+		}
+	}
+	
+	public int getSelectedRow() {
+		return getDataTableTemplate().getSelectedRow();
+	}
+	
+	public int getTicketIdFormSelectedRow(int rowIndex) {
+		return Integer.parseInt(getTicketData()[rowIndex][0]);
+	}
+	
+	public boolean ConfirmDeletion(int ticketId) {
+		int response = JOptionPane.showConfirmDialog(baseWindow, "Are you sure you want to delete ticket with ID"+ticketId+"?","Confirm Deletion",JOptionPane.YES_NO_OPTION);
+		return response == JOptionPane.YES_OPTION;
+	}
+	
+	public void deleteTicketAndRefresh(int ticketId) {
+		ticketDaoImpl.deleteTicket(ticketId);
+		TicketListingPage ticketListingPage = new TicketListingPage();
+		ticketListingPage.call();
 	}
 	
 	public void prepareBaseWindow() {

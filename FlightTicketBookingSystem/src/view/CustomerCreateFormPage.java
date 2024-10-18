@@ -75,6 +75,10 @@ public class CustomerCreateFormPage extends BaseWindow {
 				Customer customer = new Customer(id,name,email);
 				customerDao.create(customer);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created Customer !!!");
+				baseWindow.dispose();
+				CustomerListingPage customerListingPage = new CustomerListingPage();
+				customerListingPage.call();
+				
 			}
 		});
 	}
