@@ -50,27 +50,26 @@ public class SeatListingPage extends BaseWindow {
 		prepareBaseWindow();
 	}
 	
+	public void refreshTableData() {
+		super.refreshDataTable(this.getSeatData());
+	}
+	
 	public void addActionOnCreateButton() {
-		this.createButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new SeatCreateForm();
-				
-			}
-		});
+		this.createButton.addActionListener(e -> seatCreateAction());
+	}
+	
+	public void seatCreateAction() {
+		SeatCreateForm seatCreateForm = new SeatCreateForm(this);
 	}
 	
 	public void addActionOnUpdateButton() {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedRowIndex = getDataTableTemplate().getSelectedRow();
-				int seatId = Integer.parseInt(getSeatData()[selectedRowIndex][0]);
-				new seatUpdateForm(seatId);
-			}
-		});
+		this.updateButton.addActionListener(e -> seatUpdateAction());
+	}
+	
+	public void seatUpdateAction() {
+		int selectedRowIndex = getDataTableTemplate().getSelectedRow();
+		int seatId = Integer.parseInt(getSeatData()[selectedRowIndex][0]);
+		new seatUpdateForm(this,seatId);
 	}
 	
 
@@ -90,7 +89,6 @@ public class SeatListingPage extends BaseWindow {
 
 		 if (confirmDeletion(seatId)) {
 			 deleteCustomerAndRefresh(seatId);
-			 baseWindow.dispose();
 		 }
 		}
 
@@ -114,8 +112,7 @@ public class SeatListingPage extends BaseWindow {
 		
 		private void deleteCustomerAndRefresh(int seatId) {
 			 seatDao.deleteSeat(seatId);
-			 SeatListingPage seatListingPage = new SeatListingPage();
-			 seatListingPage.call();
+			 this.refreshTableData();
 			}
 	
 	public String[][] getSeatData(){

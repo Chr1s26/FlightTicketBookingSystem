@@ -38,15 +38,18 @@ public class SeatCreateForm extends BaseWindow {
 	
 	private SeatDaoImpl seatDao;
 	private FlightDaoImpl flightDao;
+	private SeatListingPage parentPage;
 	
-	 public SeatCreateForm() {
+	 public SeatCreateForm(SeatListingPage parentPage) {
+		this.seatDao = new SeatDaoImpl();
+		this.flightDao = new FlightDaoImpl();
+		this.parentPage = parentPage;
 		initializeComponent();
 		prepareBaseWindow();
 	}
 	
 	public void initializeComponent() {
-		this.seatDao = new SeatDaoImpl();
-		this.flightDao = new FlightDaoImpl();
+
 		seatIdLabel = new JLabel("seat Id");
 		seatIdValue = new JTextField();
 		seatTypeLabel = new JLabel("seat Type");
@@ -88,12 +91,14 @@ public class SeatCreateForm extends BaseWindow {
 				Seat seat = new Seat(id,type,flight,seatNumber);
 				seatDao.create(seat);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created seat !!!");
+				baseWindow.dispose();
+				parentPage.refreshTableData();
 			}
 		});
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);

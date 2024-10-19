@@ -29,18 +29,23 @@ public class AirportUpdateFormPage extends BaseWindow {
 	private JPanel panel;
 	
 	private AirportDaoImpl airportDao;
+	private AirportListingPage parentPage;
+	private Airport airport;
 	
-	public AirportUpdateFormPage(int id) {
+	public AirportUpdateFormPage(AirportListingPage parentPage,int id) {
+		this.parentPage = parentPage;
 		this.airportDao = new AirportDaoImpl();
-		initializeComponent(id);
+		this.airport = airportDao.getById(id);
+		initializeComponent();
+		addActionOnUpdateButton();
 		prepareBaseWindow();
 	}
 	
-	public void initializeComponent(int id) {
+	public void initializeComponent() {
 		airportIdLabel = new JLabel("Airport Id");
-		airportIdValue = new JLabel(id+"");
+		airportIdValue = new JLabel(this.airport.getAirportId()+"");
 		airportNameLabel = new JLabel("Airport Name");
-		airportNameValue = new JTextField();
+		airportNameValue = new JTextField(this.airport.getName());
 		updateButton = new JButton("Update");
 		cancelButton = new JButton("Cancel");
 		
@@ -53,25 +58,25 @@ public class AirportUpdateFormPage extends BaseWindow {
 		panel.add(updateButton);
 		panel.add(cancelButton);
 		
-		addActionOnUpdateButton(id);
+		
 		this.baseWindow.add(panel,BorderLayout.NORTH);
 	}
 	
-	public void addActionOnUpdateButton(int id) {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String name = airportNameValue.getText();
-				Airport airport = new Airport(id,name);
-				airportDao.updateAirport(airport);
-				JOptionPane.showMessageDialog(baseWindow, "Successfully updated Airport !!!");
-			}
-		});
+	public void addActionOnUpdateButton() {
+		this.updateButton.addActionListener(e -> airportUpdateAction());
+	}
+	
+	public void airportUpdateAction() {
+		String name = airportNameValue.getText();
+		Airport airport = new Airport(this.airport.getAirportId(),name);
+		airportDao.updateAirport(airport);
+		JOptionPane.showMessageDialog(baseWindow, "Successfully updated Airport !!!");
+		baseWindow.dispose();
+		this.parentPage.refreshTableData();
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);

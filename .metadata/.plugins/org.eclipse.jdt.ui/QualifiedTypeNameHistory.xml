@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
-    <fullyQualifiedTypeName name="Service.RouteService"/>
     <fullyQualifiedTypeName name="Dao.TicketDao"/>
     <fullyQualifiedTypeName name="javax.swing.table.AbstractTableModel"/>
     <fullyQualifiedTypeName name="Dao.CustomerDao"/>
@@ -20,13 +18,10 @@
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="Dao.FlightScheduleDaoImpl"/>
     <fullyQualifiedTypeName name="Model.FlightSchedule"/>
-    <fullyQualifiedTypeName name="view.TicketListingPage"/>
     <fullyQualifiedTypeName name="view.TicketBookingPage"/>
-    <fullyQualifiedTypeName name="Model.Ticket"/>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="javax.swing.JLabel"/>
     <fullyQualifiedTypeName name="javax.swing.LayoutFocusTraversalPolicy"/>
-    <fullyQualifiedTypeName name="java.lang.Integer"/>
     <fullyQualifiedTypeName name="view.CustomerUpdateForm"/>
     <fullyQualifiedTypeName name="view.CustomerCreateFormPage"/>
     <fullyQualifiedTypeName name="Dao.CustomerDaoImpl"/>
@@ -37,7 +32,6 @@
     <fullyQualifiedTypeName name="java.awt.BorderLayout"/>
     <fullyQualifiedTypeName name="view.TicketCreateForm"/>
     <fullyQualifiedTypeName name="Dao.TicketDaoImpl"/>
-    <fullyQualifiedTypeName name="view.SeatListingPage"/>
     <fullyQualifiedTypeName name="view.SeatCreateForm"/>
     <fullyQualifiedTypeName name="Dao.SeatDaoImpl"/>
     <fullyQualifiedTypeName name="javax.swing.JTextField"/>
@@ -45,7 +39,6 @@
     <fullyQualifiedTypeName name="Dao.FlightDaoImpl"/>
     <fullyQualifiedTypeName name="view.seatUpdateForm"/>
     <fullyQualifiedTypeName name="Model.Seat"/>
-    <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="org.w3c.dom.views.AbstractView"/>
     <fullyQualifiedTypeName name="Dao.AbstractDao"/>
     <fullyQualifiedTypeName name="Dao.AirportDao"/>
@@ -53,11 +46,18 @@
     <fullyQualifiedTypeName name="javax.swing.JMenuItem"/>
     <fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
     <fullyQualifiedTypeName name="Dao.AirportDaoImpl"/>
-    <fullyQualifiedTypeName name="view.AirportListingPage"/>
     <fullyQualifiedTypeName name="Model.Airport"/>
     <fullyQualifiedTypeName name="view.AirportCreateFormPage"/>
     <fullyQualifiedTypeName name="view.AirportUpdateFormPage"/>
     <fullyQualifiedTypeName name="javax.swing.JFrame"/>
-    <fullyQualifiedTypeName name="view.CustomerListingPage"/>
     <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="view.SeatListingPage"/>
+    <fullyQualifiedTypeName name="view.AirportListingPage"/>
+    <fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="view.CustomerListingPage"/>
+    <fullyQualifiedTypeName name="view.TicketListingPage"/>
+    <fullyQualifiedTypeName name="Model.Ticket"/>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="view.TicketUpdateForm"/>
 </qualifiedTypeNameHistroy>

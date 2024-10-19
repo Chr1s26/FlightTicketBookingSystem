@@ -29,9 +29,11 @@ public class AirportCreateFormPage extends BaseWindow {
 	private JPanel panel;
 	
 	private AirportDaoImpl airportDao;
+	private AirportListingPage parentPage;
 	
-	public AirportCreateFormPage() {
+	public AirportCreateFormPage(AirportListingPage parentPage) {
 		this.airportDao = new AirportDaoImpl();
+		this.parentPage = parentPage;
 		initializeComponent();
 		prepareBaseWindow();
 	}
@@ -67,12 +69,14 @@ public class AirportCreateFormPage extends BaseWindow {
 				Airport airport = new Airport(id,name);
 				airportDao.create(airport);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created Airport !!!");
+				baseWindow.dispose();
+				parentPage.refreshTableData();
 			}
 		});
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);

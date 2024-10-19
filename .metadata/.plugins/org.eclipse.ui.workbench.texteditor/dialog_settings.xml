@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="updateButton"/>
+		<item key="selection" value="customerLabel"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="ticketNameLabel"/>
+			<item value="customer"/>
+			<item value="getCustomerData"/>
+			<item value="customerDao"/>
+			<item value="customerId"/>
 			<item value="createButton"/>
 			<item value="Customer"/>
-			<item value="customerDao"/>
 			<item value="CustomerDaoImpl"/>
 			<item value="customerNameValue"/>
 			<item value="customerEmailLabel"/>
@@ -19,23 +23,23 @@
 			<item value="customerIdLabel"/>
 			<item value="Seat"/>
 			<item value="updateButton"/>
-			<item value="customer"/>
-			<item value="SeatCreateForm"/>
 		</list>
 		<list key="replacehistory">
+			<item value="customerLabel"/>
+			<item value="ticket"/>
+			<item value="getAirportData"/>
+			<item value="airportDao"/>
+			<item value="airportId"/>
+			<item value="seatDao"/>
+			<item value="getSeatData"/>
+			<item value="seatId"/>
 			<item value="updateButton"/>
 			<item value="Airport"/>
-			<item value="airportDao"/>
 			<item value="AirportDaoImpl"/>
 			<item value="airportNameValue"/>
 			<item value="airportName"/>
 			<item value="airportNameLabel"/>
 			<item value="airportIdValue"/>
-			<item value="airportIdLabel"/>
-			<item value="FlightSchedule"/>
-			<item value="Flight"/>
-			<item value="seat"/>
-			<item value="seatDao"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

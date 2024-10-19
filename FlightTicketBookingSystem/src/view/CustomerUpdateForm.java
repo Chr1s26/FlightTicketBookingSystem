@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -28,19 +29,22 @@ public class CustomerUpdateForm extends BaseWindow {
 	
 	private JButton updateButton;
 	private JButton cancelButton;
+	private Customer customer;
+	private CustomerListingPage parentPage;
 	
-	
-	public CustomerUpdateForm(int customerId){
-		InitializeComponent(customerId);
-		addActionOnUpdateButton(customerId);
+	public CustomerUpdateForm(CustomerListingPage parentPage,int customerId){
+		this.customerDao = new CustomerDaoImpl();
+		this.customer = customerDao.getById(customerId);
+		this.parentPage = parentPage;
+		InitializeComponent();
+		addActionOnUpdateButton();
 		prepareBaseWindow();
 	}
 	
-	public void InitializeComponent(int customerId) {
-		this.customerDao = new CustomerDaoImpl();
-		Customer customer = customerDao.getById(customerId);
+	public void InitializeComponent() {
+		
 		this.customerIdLabel = new JLabel("Customer ID : ");
-		this.customerIdValue = new JLabel(customerId+"");
+		this.customerIdValue = new JLabel(this.customer.getCustomerId()+"");
 		this.customerNameLabel = new JLabel("Customer Name : ");
 		this.customerNameValue = new JTextField(customer.getCustomerName());
 		this.customerEmailLabel = new JLabel("Customer Email");
@@ -64,27 +68,23 @@ public class CustomerUpdateForm extends BaseWindow {
 		this.baseWindow.add(panel,BorderLayout.NORTH);
 	}
 	
-	public void addActionOnUpdateButton(int customerId) {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Customer customer1 = customerDao.getById(customerId);
-				String name = customerNameValue.getText();
-				customerNameValue.setText(customer1.getCustomerName());
-				String email = customerEmailValue.getText();
-				customerEmailValue.setText(customer1.getEmail());
-				Customer customer = new Customer(customerId,name, email);
-				baseWindow.dispose();
-				CustomerListingPage customerListingPage = new CustomerListingPage();
-				customerListingPage.call();
-				customerDao.updateCustomer(customer);
-			}
-		});
+	public void addActionOnUpdateButton() {
+		this.updateButton.addActionListener(e -> customerUpdateAction());}
+	
+	
+	public void customerUpdateAction() {
+		String name = customerNameValue.getText();
+		String email = customerEmailValue.getText();
+		Customer customer = new Customer(this.customer.getCustomerId(),name, email);
+		customerDao.updateCustomer(customer);
+		JOptionPane.showMessageDialog(this.baseWindow, "Successful update!!!");
+		baseWindow.dispose();
+		this.parentPage.refreshTableData();
+		
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);

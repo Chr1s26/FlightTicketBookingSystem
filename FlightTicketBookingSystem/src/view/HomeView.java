@@ -29,12 +29,12 @@ public class HomeView extends BaseWindow {
 		
 		this.homeMenu = new JMenuBar();
 		this.customerMenu = new JMenu("Customer");
-		this.flightScheduleMenu = new JMenu("Flight Schedule");
+		this.flightScheduleMenu = new JMenu("Booking");
 		this.ticketMenu = new JMenu("Ticket");
 		this.seatMenu = new JMenu("Seat");
 		this.airportMenu = new JMenu("Airport");
 		
-		this.scheduleListing = new JMenuItem("Schedule Listing");
+		this.scheduleListing = new JMenuItem("Schedule Listing for booking");
 		this.ticketMenuListing = new JMenuItem("Ticket Listing");
 		this.customerMenuListing = new JMenuItem("Customer Listing");
 		this.seatMenuListing = new JMenuItem("Seat Listing");

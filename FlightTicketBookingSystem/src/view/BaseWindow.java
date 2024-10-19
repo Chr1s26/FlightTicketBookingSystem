@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class BaseWindow {
 	public JFrame baseWindow;
@@ -12,6 +13,7 @@ public class BaseWindow {
 	private String[] columns;
 	private JTable dataTableTemplate;
 	private JScrollPane scrollPane;
+	private DefaultTableModel tableModel;
 
 	public BaseWindow() {
 		initializeBaseFrame();
@@ -28,10 +30,24 @@ public class BaseWindow {
 	public void createDataTable(String[][] data, String[] column) {
 		this.tableData = data;
 		this.columns = column;
-		this.dataTableTemplate = new JTable(this.tableData,columns);
+		this.tableModel = new DefaultTableModel(null,column);
+		this.dataTableTemplate = new JTable(this.tableModel);
 		this.scrollPane = new JScrollPane(this.dataTableTemplate);
 		this.baseWindow.add(this.scrollPane,BorderLayout.CENTER);
+		loadDataTable();
 	}
+	
+	public void refreshDataTable(String[][] updatedData) {
+		this.tableData = updatedData;
+		this.tableModel.setRowCount(0);
+		loadDataTable();
+	}
+
+	private void loadDataTable() {
+		for(String[] dataArr : this.tableData) {
+				this.tableModel.addRow(dataArr);
+			}
+		}
 
 	public JTable getDataTableTemplate() {
 		return dataTableTemplate;

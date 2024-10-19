@@ -15,6 +15,7 @@ import javax.swing.LayoutFocusTraversalPolicy;
 
 import Dao.FlightDaoImpl;
 import Dao.SeatDaoImpl;
+import Model.Customer;
 import Model.Flight;
 import Model.Seat;
 
@@ -39,22 +40,28 @@ public class seatUpdateForm extends BaseWindow {
 	private SeatDaoImpl seatDao;
 	private FlightDaoImpl flightDao;
 	
-	 public seatUpdateForm(int id) {
-		initializeComponent(id);
+	private SeatListingPage parentPage;
+	private Seat seat;
+	
+	 public seatUpdateForm(SeatListingPage parentPage,int id) {
+		this.seatDao = new SeatDaoImpl();
+		this.seat = seatDao.getById(id);
+		this.flightDao = new FlightDaoImpl();
+		this.parentPage = parentPage;
+		initializeComponent();
+		addActionOnupdateButton();
 		prepareBaseWindow();
 	}
 	
-	public void initializeComponent(int id) {
-		this.seatDao = new SeatDaoImpl();
-		this.flightDao = new FlightDaoImpl();
+	public void initializeComponent() {
 		seatIdLabel = new JLabel("seat Id");
-		seatIdValue = new JLabel(id+"");
+		seatIdValue = new JLabel(this.seat.getSeatid()+"");
 		seatTypeLabel = new JLabel("seat Type");
-		seatTypeValue = new JTextField();
+		seatTypeValue = new JTextField(seat.getSeatType());
 		seatFlightLabel = new JLabel("Flight Id");
-		seatFlightValue = new JTextField();
+		seatFlightValue = new JTextField(seat.getFlight().getFlightid());
 		seatNumberLabel = new JLabel("Seat Number");
-		seatNumberValue = new JTextField();
+		seatNumberValue = new JTextField(seat.getSeatNumber());
 		updateButton = new JButton("Update");
 		cancelButton = new JButton("Cancel");
 		
@@ -71,28 +78,27 @@ public class seatUpdateForm extends BaseWindow {
 		panel.add(updateButton);
 		panel.add(cancelButton);
 		
-		addActionOnupdateButton(id);
 		this.baseWindow.add(panel,BorderLayout.NORTH);
 	}
 	
-	public void addActionOnupdateButton(int id) {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String type = seatTypeValue.getText();
-				int flightid = Integer.parseInt(seatFlightValue.getText());
-				Flight flight = flightDao.getById(flightid);
-				String seatNumber = seatNumberValue.getText();
-				Seat seat = new Seat(id,type,flight,seatNumber);
-				seatDao.updateSeat(seat);
-				JOptionPane.showMessageDialog(baseWindow, "Successfully updated seat !!!");
-			}
-		});
+	public void addActionOnupdateButton() {
+		this.updateButton.addActionListener(e -> seatUpdateAction());
+	}
+	
+	public void seatUpdateAction() {
+		String type = seatTypeValue.getText();
+		int flightid = Integer.parseInt(seatFlightValue.getText());
+		Flight flight = flightDao.getById(flightid);
+		String seatNumber = seatNumberValue.getText();
+		Seat seat = new Seat(this.seat.getSeatid(),type,flight,seatNumber);
+		seatDao.updateSeat(seat);
+		JOptionPane.showMessageDialog(baseWindow, "Successfully updated seat !!!");
+		baseWindow.dispose();
+		this.parentPage.refreshTableData();
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);

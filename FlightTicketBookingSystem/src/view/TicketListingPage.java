@@ -25,6 +25,7 @@ public class TicketListingPage extends BaseWindow{
 	public TicketListingPage() {
 		InitializeComponent();
 		this.createDataTable(getTicketData(), columns);
+		this.prepareBaseWindow();
 	}
 	
 	public void InitializeComponent() {
@@ -37,23 +38,24 @@ public class TicketListingPage extends BaseWindow{
 		panel.add(this.updateButton);
 		panel.add(this.deleteButton);
 		
-//		this.addActionOnUpdateButton();
+		this.addActionOnUpdateButton();
 		this.addActionOnDeleteButton();
 		
 		this.baseWindow.add(panel,BorderLayout.SOUTH);
 	}
 	
-//	public void addActionOnUpdateButton() {
-//		this.updateButton.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
-//	}
+	public void addActionOnUpdateButton() {
+		this.updateButton.addActionListener(e -> updateAction());}
 	
+	public void updateAction() {
+		int ticketId = getTicketIdFormSelectedRow(getSelectedRow());
+		if(ticketId != -1) {
+			JOptionPane.showMessageDialog(baseWindow, "Please select a customer to update.");
+			return;
+		}	
+		new TicketUpdateForm(this,ticketId);
+	}
+
 	public void call() {
 		prepareBaseWindow();
 	}
@@ -101,6 +103,10 @@ public class TicketListingPage extends BaseWindow{
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
+	}
+	
+	public void refreshTicketDataTable() {
+		super.createDataTable(getTicketData(), columns);
 	}
 	
 	public String[][] getTicketData(){

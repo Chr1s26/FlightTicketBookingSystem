@@ -46,30 +46,30 @@ public class AirportListingPage extends BaseWindow {
 		
 	}
 	
+	public void call() {
+		prepareBaseWindow();
+	}
+	
+	public void refreshTableData() {
+		super.refreshDataTable(getAirportData());
+	}
+	
 	public void addActionOnCreateButton() {
-		this.createButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new AirportCreateFormPage();
-			}
-		});
+		this.createButton.addActionListener(e -> airportCreateAction());
+	}
+	
+	public void airportCreateAction() {
+		new AirportCreateFormPage(this);
 	}
 	
 	public void addActionOnUpdateButton() {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedRowIndex = getDataTableTemplate().getSelectedRow();
-				int airportId = Integer.parseInt(getAirportData()[selectedRowIndex][0]);
-				new AirportUpdateFormPage(airportId);
-			}
-		});
+		this.updateButton.addActionListener(e -> airportUpdateAction());
 	}
 	
-	public void call() {
-		prepareBaseWindow();
+	public void airportUpdateAction() {
+		int selectedRowIndex = getDataTableTemplate().getSelectedRow();
+		int airportId = Integer.parseInt(getAirportData()[selectedRowIndex][0]);
+		new AirportUpdateFormPage(this,airportId);
 	}
 	
 	public void addActionOnDeleteButton() {
@@ -88,7 +88,6 @@ public class AirportListingPage extends BaseWindow {
 
 		 if (confirmDeletion(airportId)) {
 			 deleteCustomerAndRefresh(airportId);
-			 baseWindow.dispose();
 		 }
 		}
 
@@ -112,8 +111,7 @@ public class AirportListingPage extends BaseWindow {
 		
 		private void deleteCustomerAndRefresh(int airportId) {
 			 airportDao.deleteAirport(airportId);
-			 AirportListingPage airportListingPage = new AirportListingPage();
-			 airportListingPage.call();
+			 this.refreshTableData();
 			}
 	
 	public String[][] getAirportData(){

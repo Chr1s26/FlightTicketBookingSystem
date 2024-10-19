@@ -24,11 +24,11 @@ public class CustomerListingPage extends BaseWindow {
 	private JPanel panel;
 	
 	public CustomerListingPage() {
-		panel = new JPanel();
+		panel = new JPanel();	
 		panel.setLayout(new GridLayout(1,3));
 		customerDao = new CustomerDaoImpl();
 		
-		refreshTableData();
+		this.createDataTable(this.getCustomerData(), this.columns);
 		
 		this.createButton = new JButton("Create");
 		this.updateButton = new JButton("Update");
@@ -51,33 +51,26 @@ public class CustomerListingPage extends BaseWindow {
 	}
 	
 	public void refreshTableData() {
-		this.createDataTable(getCustomerData(), columns);
+		super.refreshDataTable(this.getCustomerData());
 	}
 	
 	public void addActionOnCreateButton() {
-		this.createButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				baseWindow.dispose();
-				CustomerCreateFormPage customerCreateFormPage = new CustomerCreateFormPage();
-				
-				
-			}
-		});
+		this.createButton.addActionListener(e -> customerCreateAction()); }
+		
+	
+	public void customerCreateAction() {
+		CustomerCreateFormPage customerCreateFormPage = new CustomerCreateFormPage(this);	
 	}
 	
+
 	public void addActionOnUpdateButton() {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				baseWindow.dispose();
-				int selectedRowIndex = getDataTableTemplate().getSelectedRow();
-				int customerId = Integer.parseInt(getCustomerData()[selectedRowIndex][0]);
-				new CustomerUpdateForm(customerId);
-			}
-		});
+		this.updateButton.addActionListener(e -> customerUpdateAction());
+	}
+
+	public void customerUpdateAction(){
+		int selectedRowIndex = getDataTableTemplate().getSelectedRow();
+		int customerId = Integer.parseInt(getCustomerData()[selectedRowIndex][0]);
+		new CustomerUpdateForm(this ,customerId);
 	}
 	
 	public void addActionOnDeleteButton() {
@@ -96,19 +89,20 @@ public class CustomerListingPage extends BaseWindow {
 
 		 if (confirmDeletion(customerId)) {
 			 deleteCustomerAndRefresh(customerId);
-			 baseWindow.dispose();
 		 }
 		}
 
-		private int getSelectedRow() {
+	private int getSelectedRow() {
 			return getDataTableTemplate().getSelectedRow();
 		}
+	
 
-		private int getCustomerIdFromSelectedRow(int rowIndex) {
+	private int getCustomerIdFromSelectedRow(int rowIndex) {
 			return Integer.parseInt(getCustomerData()[rowIndex][0]);
 		}
+	
 
-		private boolean confirmDeletion(int customerId) {
+	private boolean confirmDeletion(int customerId) {
 			int response = JOptionPane.showConfirmDialog(
 					baseWindow,
 					"Are you sure you want to delete customer with ID " + customerId + "?",
@@ -118,10 +112,9 @@ public class CustomerListingPage extends BaseWindow {
 			return response == JOptionPane.YES_OPTION;
 		}
 		
-		private void deleteCustomerAndRefresh(int customerId) {
+	private void deleteCustomerAndRefresh(int customerId) {
 			 customerDao.deleteCustomer(customerId);
-			 CustomerListingPage customerListingPage = new CustomerListingPage();
-			 customerListingPage.call();
+			 this.refreshTableData();
 			}
 	
 	public String[][] getCustomerData(){
@@ -138,7 +131,7 @@ public class CustomerListingPage extends BaseWindow {
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
