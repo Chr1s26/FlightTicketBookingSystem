@@ -5,11 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import Dao.CustomerDaoImpl;
 import Model.Customer;
@@ -28,22 +24,29 @@ public class CustomerUpdateForm extends BaseWindow {
 	
 	private JButton updateButton;
 	private JButton cancelButton;
+	private Customer customer;
+	private CustomerListingPage parentPage;
 	
 	
-	public CustomerUpdateForm(int customerId){
-		InitializeComponent(customerId);
-		addActionOnUpdateButton(customerId);
+	public CustomerUpdateForm(CustomerListingPage parentPage, int customerId){
+		this.customerDao = new CustomerDaoImpl();
+		this.customer = this.customerDao.getById(customerId);
+		this.parentPage = parentPage;
+		InitializeComponent();
+		addActionOnUpdateButton();
 		prepareBaseWindow();
 	}
 	
-	public void InitializeComponent(int customerId) {
-		this.customerDao = new CustomerDaoImpl();
+	public void InitializeComponent() {
+
 		this.customerIdLabel = new JLabel("Customer ID : ");
-		this.customerIdValue = new JLabel(customerId+"");
+		this.customerIdValue = new JLabel(this.customer.getCustomerId()+"");
 		this.customerNameLabel = new JLabel("Customer Name : ");
 		this.customerNameValue = new JTextField();
+		this.customerNameValue.setText(this.customer.getCustomerName());
 		this.customerEmailLabel = new JLabel("Customer Email");
 		this.customerEmailValue = new JTextField();
+		this.customerEmailValue.setText(this.customer.getEmail());
 		
 		this.updateButton = new JButton("Update");
 		this.cancelButton = new JButton("Cancel");
@@ -63,17 +66,18 @@ public class CustomerUpdateForm extends BaseWindow {
 		this.baseWindow.add(panel,BorderLayout.NORTH);
 	}
 	
-	public void addActionOnUpdateButton(int customerId) {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String name = customerNameValue.getText();
-				String email = customerEmailValue.getText();
-				Customer customer = new Customer(customerId,name, email);
-				customerDao.updateCustomer(customer);
-			}
-		});
+	public void addActionOnUpdateButton() {
+		this.updateButton.addActionListener(e -> customerUpdateAction());
+	}
+
+	public void customerUpdateAction(){
+		String name = customerNameValue.getText();
+		String email = customerEmailValue.getText();
+		Customer customer = new Customer(this.customer.getCustomerId(),name, email);
+		customerDao.updateCustomer(customer);
+		JOptionPane.showMessageDialog(this.baseWindow, "Successful update!!!");
+		baseWindow.dispose();
+		this.parentPage.refreshTableData();
 	}
 	
 	public void prepareBaseWindow() {

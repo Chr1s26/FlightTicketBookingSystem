@@ -32,9 +32,11 @@ public class CustomerCreateFormPage extends BaseWindow {
 	private JPanel panel;
 	
 	private CustomerDaoImpl customerDao;
+	private CustomerListingPage parentPage;
 	
-	public CustomerCreateFormPage() {
+	public CustomerCreateFormPage(CustomerListingPage parentPage) {
 		this.customerDao = new CustomerDaoImpl();
+		this.parentPage = parentPage;
 		initializeComponent();
 		prepareBaseWindow();
 	}
@@ -75,12 +77,14 @@ public class CustomerCreateFormPage extends BaseWindow {
 				Customer customer = new Customer(id,name,email);
 				customerDao.create(customer);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created Customer !!!");
+				baseWindow.dispose();
+				parentPage.refreshTableData();
 			}
 		});
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);

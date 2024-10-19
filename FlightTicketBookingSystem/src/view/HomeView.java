@@ -69,7 +69,6 @@ public class HomeView extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new AirportListingPage();
-				
 			}
 		});
 	}
@@ -80,6 +79,7 @@ public class HomeView extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			CustomerListingPage customerListingPage = new CustomerListingPage();
+			customerListingPage.call();
 			}
 		});
 	}
