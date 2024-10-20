@@ -22,6 +22,8 @@ public class SeatListingPage extends BaseWindow {
 	private JButton updateButton;
 	private JButton deleteButton;
 	private JPanel panel;
+	private BaseWindow parentWindow;
+	private JButton selectButton;
 	
 	public SeatListingPage() {
 		panel = new JPanel();
@@ -44,6 +46,48 @@ public class SeatListingPage extends BaseWindow {
 		this.addActionOnUpdateButton();
 		this.addActionOnDeleteButton();
 		
+	}
+	
+	public SeatListingPage(BaseWindow parentWindow) {
+		this.parentWindow = parentWindow;
+		InitializeSelectComponent();
+	}
+	
+	public void InitializeSelectComponent() {
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(1,3));
+		seatDao = new SeatDaoImpl();
+		this.createDataTable(getSeatData(), columns);
+		
+		this.selectButton = new JButton("Select Seat");
+		
+		panel.add(this.selectButton);
+		this.baseWindow.add(panel,BorderLayout.SOUTH);
+		
+		this.addActionOnSelectButton();
+	}
+	
+	public void addActionOnSelectButton() {
+		this.selectButton.addActionListener(e -> selectAction());
+	}
+	
+	public void selectAction() {
+		int selectedRowIndex = getSelectedRow();
+
+		 if (selectedRowIndex == -1) {
+			 JOptionPane.showMessageDialog(baseWindow, "Please select a seat to update.");
+			 return;
+		 }
+		 
+		 int seatId = getSeatIdFromSelectedRow(selectedRowIndex);
+		 selectSeatAndRefresh(seatId);
+		 this.baseWindow.dispose();
+	}
+	
+	public void selectSeatAndRefresh(int seatId){
+		Seat selectedSeat = this.seatDao.getById(seatId);
+		TicketUpdateForm ticketUpdateForm = (TicketUpdateForm)this.parentWindow;
+		ticketUpdateForm.refreshSeatValueBtn(selectedSeat);
 	}
 	
 	public void call() {

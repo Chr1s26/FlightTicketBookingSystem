@@ -112,6 +112,7 @@ public class HomeView extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ScheduleListingPage scheduleListingPage = new ScheduleListingPage();
+				scheduleListingPage.call();
 			}
 		});
 	}

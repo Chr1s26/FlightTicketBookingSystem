@@ -1,11 +1,15 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -17,9 +21,17 @@ public class ScheduleListingPage extends BaseWindow {
 	private String[] columns = {"Id","Flight Name","Flight Number","Dept Airport","Arrival Airport","Dept Time","Arrival Time","Created At"};
 	private FlightScheduleDaoImpl flightScheduleDaoImpl;
 	private JButton getAvaiableSeatBtn;
+	private BaseWindow parentWindow;
+	private JPanel panel ;
+	private JButton selectButton;
+	
+	public ScheduleListingPage(BaseWindow parentWindow) {
+		this.parentWindow = parentWindow;
+		initializeSelectComponent();
+	}
 	
 	public ScheduleListingPage() {
-		this.setTitle("Schedule Page");
+		
 		this.flightScheduleDaoImpl = new FlightScheduleDaoImpl();
 		
 		this.getAvaiableSeatBtn = new JButton("Show Avaiable Seats");
@@ -29,8 +41,44 @@ public class ScheduleListingPage extends BaseWindow {
 			
 		this.createDataTable(this.getScheduleData(), columns);
 		
-		this.baseWindow.setSize(800,400);
-		this.baseWindow.setVisible(true);
+		
+	}
+	
+	public void initializeSelectComponent() {
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(1,1));
+		this.flightScheduleDaoImpl = new FlightScheduleDaoImpl();
+		this.createDataTable(this.getScheduleData(), columns);
+		this.selectButton = new JButton("Select Schedule");
+		panel.add(this.selectButton);
+		this.baseWindow.add(panel,BorderLayout.SOUTH);
+		this.addActionOnSelectButton();
+	}
+	
+	public void addActionOnSelectButton() {
+		this.selectButton.addActionListener(e -> selectAction());
+	}
+	
+	public void selectAction() {
+		 int selectedRowIndex = getSelectedRow();
+		 if (selectedRowIndex == -1) {
+			 JOptionPane.showMessageDialog(baseWindow, "Please select a customer to update.");
+			 return;
+		 }
+		 
+		 int scheduleId = getScheduleIdFromSelectedRow(selectedRowIndex);
+		 selectedScheduleAndRefresh(scheduleId);
+		 this.baseWindow.dispose();
+	}
+	
+	public void selectedScheduleAndRefresh(int scheduleId) {
+		FlightSchedule flightSchedule = this.flightScheduleDaoImpl.getById(scheduleId);
+		TicketUpdateForm ticketUpdateForm = (TicketUpdateForm)this.parentWindow;
+		ticketUpdateForm.refreshScheduleValueBtn(flightSchedule);
+	}
+	
+	public int getScheduleIdFromSelectedRow(int rowIndex) {
+		return Integer.parseInt(getScheduleData()[rowIndex][0]);
 	}
 
 	private void addActionAvailableSeatBtn() {
@@ -42,6 +90,21 @@ public class ScheduleListingPage extends BaseWindow {
 				SeatView seatView = new SeatView(scheduleId);
 			}
 		});
+	}
+	
+	private int getSelectedRow() {
+		return getDataTableTemplate().getSelectedRow();
+	}
+	
+	public void call() {
+		prepareBaseWindow();
+	}
+	
+	public void prepareBaseWindow() {
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Schedule Page");
+		this.baseWindow.setSize(800,400);
+		this.baseWindow.setVisible(true);
 	}
 	
 	private String[][] getScheduleData(){

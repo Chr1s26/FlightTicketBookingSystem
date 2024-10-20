@@ -128,6 +128,51 @@ public class TicketDaoImpl extends TicketDao {
 				this.connectionFactory.closeConnection();
 			}
 	}
+
+	@Override
+	public void updateTicket(Ticket ticket) {
+		try {
+			String query = "UPDATE tickets SET schedule_id = ?, customer_id = ?, seat_id = ?, price = ? WHERE id = ?";
+			Connection connection = connectionFactory.createConnection();
+			PreparedStatement prepareStatement = connection.prepareStatement(query);
+			prepareStatement.setInt(1, ticket.getSchedule().getScheduleid());
+			prepareStatement.setInt(2, ticket.getCustomer().getCustomerId());
+			prepareStatement.setInt(3, ticket.getSeat().getSeatid());
+			prepareStatement.setDouble(4, ticket.getTicketprice());
+			prepareStatement.setInt(5, ticket.getTicketId());
+			int rowsAffected = prepareStatement.executeUpdate();
+	        
+	        if (rowsAffected > 0) {
+	            System.out.println("Customer updated successfully.");
+	        } else {
+	            System.out.println("No customer found with the given ID.");
+	        }
+			}catch (SQLException e) {
+				System.out.print("SQL Exception for : "+e.getMessage());
+			}
+			finally {
+				this.connectionFactory.closeConnection();
+			}
+		
+	}
+
+	@Override
+	public String getUpdateQuery() {
+		return "UPDATE tickets SET schedule_id = ?, customer_id = ?, seat_id = ?, price = ? WHERE id = ?";
+	}
+
+	@Override
+	public void prepareParamsForUpdate(PreparedStatement preparedStatement, Ticket object) {
+		try {
+			preparedStatement.setInt(1, object.getSchedule().getScheduleid());
+			preparedStatement.setInt(2, object.getCustomer().getCustomerId());
+			preparedStatement.setInt(3, object.getSeat().getSeatid());
+			preparedStatement.setDouble(4, object.getTicketprice());
+			preparedStatement.setInt(5, object.getTicketId());
+		} catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+	}
 }
 
 	

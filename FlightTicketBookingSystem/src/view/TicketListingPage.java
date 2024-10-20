@@ -44,20 +44,32 @@ public class TicketListingPage extends BaseWindow{
 		this.baseWindow.add(panel,BorderLayout.SOUTH);
 	}
 	
+	public void call() {
+		prepareBaseWindow();
+	}
+	
+	public void refreshTableData() {
+		super.refreshDataTable(getTicketData());
+	}
+	
 	public void addActionOnUpdateButton() {
 		this.updateButton.addActionListener(e -> updateAction());}
 	
 	public void updateAction() {
 		int ticketId = getTicketIdFormSelectedRow(getSelectedRow());
-		if(ticketId != -1) {
-			JOptionPane.showMessageDialog(baseWindow, "Please select a customer to update.");
+		if(ticketId == -1) {
+			JOptionPane.showMessageDialog(baseWindow, "Please select a ticket to update.");
 			return;
 		}	
 		new TicketUpdateForm(this,ticketId);
 	}
-
-	public void call() {
-		prepareBaseWindow();
+	
+	public int getSelectedRow() {
+		return getDataTableTemplate().getSelectedRow();
+	}
+	
+	public int getTicketIdFormSelectedRow(int rowIndex) {
+		return Integer.parseInt(getTicketData()[rowIndex][0]);
 	}
 	
 	public void addActionOnDeleteButton() {
@@ -75,17 +87,9 @@ public class TicketListingPage extends BaseWindow{
 		
 		if(ConfirmDeletion(ticketId)) {
 			deleteTicketAndRefresh(ticketId);
-			baseWindow.dispose();
 		}
 	}
 	
-	public int getSelectedRow() {
-		return getDataTableTemplate().getSelectedRow();
-	}
-	
-	public int getTicketIdFormSelectedRow(int rowIndex) {
-		return Integer.parseInt(getTicketData()[rowIndex][0]);
-	}
 	
 	public boolean ConfirmDeletion(int ticketId) {
 		int response = JOptionPane.showConfirmDialog(baseWindow, "Are you sure you want to delete ticket with ID"+ticketId+"?","Confirm Deletion",JOptionPane.YES_NO_OPTION);
@@ -94,8 +98,7 @@ public class TicketListingPage extends BaseWindow{
 	
 	public void deleteTicketAndRefresh(int ticketId) {
 		ticketDaoImpl.deleteTicket(ticketId);
-		TicketListingPage ticketListingPage = new TicketListingPage();
-		ticketListingPage.call();
+		this.refreshTableData();
 	}
 	
 	public void prepareBaseWindow() {
@@ -103,10 +106,6 @@ public class TicketListingPage extends BaseWindow{
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
-	}
-	
-	public void refreshTicketDataTable() {
-		super.createDataTable(getTicketData(), columns);
 	}
 	
 	public String[][] getTicketData(){

@@ -23,7 +23,11 @@ public abstract class AbstractDao<T> {
 	
 	public abstract String getInsertQuery();
 	
-	public abstract void prepareParams(PreparedStatement preparedStatement,T object) ;
+	public abstract String getUpdateQuery();
+	
+	public abstract void prepareParams(PreparedStatement preparedStatement,T object);
+	
+	public abstract void prepareParamsForUpdate(PreparedStatement preparedStatement,T object);
 	
 	public List<T> getAll() {
 		List<T> objects = new ArrayList<T>();
@@ -64,6 +68,20 @@ public abstract class AbstractDao<T> {
 			this.connectionFactory.closeConnection();
 		}
 		return object;
+	}
+	
+	public void update(T object) {
+		try {
+			String query = this.getUpdateQuery();
+			Connection connection = connectionFactory.createConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			this.prepareParamsForUpdate(preparedStatement, object);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}finally {
+			this.connectionFactory.closeConnection();
+		}
 	}
 	
 	public void create(T object) {

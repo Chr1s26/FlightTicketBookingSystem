@@ -115,6 +115,23 @@ public class CustomerDaoImpl extends CustomerDao {
 			}
 	}
 
+	@Override
+	public String getUpdateQuery() {
+		return  "UPDATE customers SET name = ?, email = ? WHERE id = ?";
+	}
+
+	@Override
+	public void prepareParamsForUpdate(PreparedStatement preparedStatement, Customer object) {
+		try {
+			preparedStatement.setString(1, object.getCustomerName());
+			preparedStatement.setString(2, object.getEmail());
+			preparedStatement.setInt(3, object.getCustomerId());
+		} catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+		
+	}
+
 	
 
 }

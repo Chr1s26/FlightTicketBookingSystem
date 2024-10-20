@@ -42,6 +42,23 @@ public class FlightDaoImpl extends AbstractDao<Flight> {
 		} 
 		
 	}
+
+	@Override
+	public String getUpdateQuery() {
+		return "UPDATE flights SET name = ?,number = ? WHERE id = ?";
+	}
+
+	@Override
+	public void prepareParamsForUpdate(PreparedStatement preparedStatement, Flight object) {
+		try {
+		preparedStatement.setString(1, object.getFlightname());
+		preparedStatement.setString(2, object.getFlightNumber());
+		preparedStatement.setInt(3, object.getFlightid());}
+		catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+		
+	}
 	
 	}
 

@@ -88,5 +88,22 @@ public class AirportDaoImpl extends AirportDao {
 		
 	}
 
+	@Override
+	public String getUpdateQuery() {
+		
+		return "UPDATE airports SET name = ? WHERE id = ?";
+	}
+
+	@Override
+	public void prepareParamsForUpdate(PreparedStatement preparedStatement, Airport object) {
+		try {
+			preparedStatement.setString(1, object.getName());
+			preparedStatement.setInt(2, object.getAirportId());
+		} catch (Exception e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+		
+	}
+
 
 }

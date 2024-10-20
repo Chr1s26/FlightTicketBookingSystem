@@ -54,5 +54,26 @@ public class FlightScheduleDaoImpl extends AbstractDao<FlightSchedule>{
 		}
 		
 	}
+
+	@Override
+	public String getUpdateQuery() {
+		return "UPDATE schedules SET route_id = ?, flight_id = ?, dept_time = ?, arrive_time = ?, created_at = ? WHERE id = ?";
+	}
+
+	@Override
+	public void prepareParamsForUpdate(PreparedStatement preparedStatement, FlightSchedule object) {
+		try {
+		preparedStatement.setInt(1,object.getRoute().getRouteId());
+		preparedStatement.setInt(2,object.getFlight().getFlightid());
+		preparedStatement.setString(3,object.getDeptTime());
+		preparedStatement.setString(4, object.getArrivalTime());
+		preparedStatement.setString(5, object.getCreatedAt());
+		preparedStatement.setInt(6, object.getScheduleid());
+		}
+		catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+
+		}
+	}
 	
 }

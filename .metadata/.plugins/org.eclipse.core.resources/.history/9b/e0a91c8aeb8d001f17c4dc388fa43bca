@@ -1,0 +1,116 @@
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutFocusTraversalPolicy;
+
+
+import Dao.TicketDaoImpl;
+import Model.Customer;
+import Model.Ticket;
+
+public class TicketUpdateForm extends BaseWindow {
+	private JLabel ticketIdLabel;
+	private JLabel ticketIdValue;
+	
+	private JLabel customerLabel;
+	private JButton customerValueBtn;
+	
+	private JLabel ticketScheduleLabel;
+	private JButton ticketScheduleValueBtn;
+	
+	private JLabel seatLabel;
+	private JButton seatValueBtn;
+	
+	private JButton createButton;
+	private JButton cancelButton;
+	
+	private JPanel panel;
+	
+	private TicketDaoImpl ticketDao;
+	
+	private TicketListingPage parentPage;
+	private Ticket ticket;
+	
+	public TicketUpdateForm(TicketListingPage parentPage,int ticektId) {
+		this.ticketDao = new TicketDaoImpl();
+		this.ticket = this.ticketDao.getById(ticektId);
+		this.parentPage = parentPage;
+		initializeComponent();
+		prepareBaseWindow();
+	}
+	
+	public void initializeComponent() {
+		ticketIdLabel = new JLabel("ticket Id : ");
+		ticketIdValue = new JLabel(this.ticket.getTicketId()+"");
+		
+		customerLabel = new JLabel("Customer Name : ");
+		customerValueBtn = new JButton(this.ticket.getCustomer().getCustomerName());
+		
+		ticketScheduleLabel = new JLabel("Schedule Id : ");
+		ticketScheduleValueBtn = new JButton(this.ticket.getSchedule().getScheduleid()+"");
+		
+		seatLabel = new JLabel("Seat Id : ");
+		seatValueBtn = new JButton(this.ticket.getSeat().getSeatid()+"("+this.ticket.getSeat().getSeatNumber()+")");
+		
+		createButton = new JButton("Create");
+		cancelButton = new JButton("Cancel");
+		
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(5,2));
+		panel.add(ticketIdLabel);
+		panel.add(ticketIdValue);
+		
+		panel.add(customerLabel);
+		panel.add(customerValueBtn);
+		
+		panel.add(ticketScheduleLabel);
+		panel.add(ticketScheduleValueBtn);
+		
+		panel.add(seatLabel);
+		panel.add(seatValueBtn);
+		
+		panel.add(createButton);
+		panel.add(cancelButton);
+		
+		addActionOnUpdateButton();
+		this.baseWindow.add(panel,BorderLayout.NORTH);
+	}
+	
+	public void addActionOnUpdateButton() {
+		this.createButton.addActionListener(e -> ticketUpdateAction());
+	}
+	
+	public void ticketUpdateAction() {
+		JOptionPane.showMessageDialog(baseWindow, "Successfully created Ticket !!!");
+	}
+	
+	public void refreshCustomerValueBtn(Customer selectedCustomer) {
+		this.customerValueBtn.setText(selectedCustomer.getCustomerName());
+	}
+	
+	public void addActionOnCustomerButton() {
+		this.customerValueBtn.addActionListener(e -> selectCustomerAction());
+	}
+	
+	public void selectCustomerAction() {
+		CustomerListingPage customerListingPage = new CustomerListingPage(this);
+	}
+	
+	public void prepareBaseWindow() {
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Ticket Update Form ");
+		this.baseWindow.setSize(800,400);
+		this.baseWindow.setVisible(true);
+	}
+}

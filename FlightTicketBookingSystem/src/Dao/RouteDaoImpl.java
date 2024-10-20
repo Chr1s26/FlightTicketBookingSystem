@@ -49,4 +49,22 @@ public class RouteDaoImpl extends AbstractDao<Route> {
 		
 	}
 
+	@Override
+	public String getUpdateQuery() {
+		return "UPDATE routes SET arrive_airport_id = ?, dept_airport_id = ?, distance = ? WHERE id = ?";
+	}
+
+	@Override
+	public void prepareParamsForUpdate(PreparedStatement preparedStatement, Route object) {
+		try {
+			preparedStatement.setInt(1, object.getArrivalAirport().getAirportId());
+			preparedStatement.setInt(2, object.getDepatureAirport().getAirportId());
+			preparedStatement.setInt(3, object.getDistance());
+			preparedStatement.setInt(4, object.getRouteId());
+		} catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+		
+	}
+
 }

@@ -150,6 +150,24 @@ public class SeatDaoImpl extends SeatDao {
 		
 	}
 
+	@Override
+	public String getUpdateQuery() {
+		return "UPDATE seats SET seat_type = ?, flight_id = ?, name = ? WHERE id = ?";
+	}
+
+	@Override
+	public void prepareParamsForUpdate(PreparedStatement preparedStatement, Seat object) {
+		try {
+			preparedStatement.setString(1, object.getSeatType());
+			preparedStatement.setInt(2, object.getFlight().getFlightid());
+			preparedStatement.setString(3, object.getSeatNumber());
+			preparedStatement.setInt(4, object.getSeatid());
+		} catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+		
+	}
+
 	}
 
 
