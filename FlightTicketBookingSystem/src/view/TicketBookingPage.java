@@ -1,9 +1,12 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,7 +44,7 @@ public class TicketBookingPage extends BaseWindow {
 	private JLabel deptTimevalue;
 	private JLabel arriveTimevalue;
 	private JLabel ticketPricevalue;
-	private JTextField customerTextField;
+	private JLabel customerValueLabel;
 	private JLabel routeInfoValue;
 	
 	private FlightSchedule flightSchedule;
@@ -52,6 +55,7 @@ public class TicketBookingPage extends BaseWindow {
 	private JButton cancelButton;
 	private CustomerDaoImpl customerdao;
 	private TicketDaoImpl ticketDaoImpl;
+	private Customer customer;
 	
 	public TicketBookingPage(int scheduleId,int seatId) {
 		flightScheduleDao = new FlightScheduleDaoImpl();
@@ -92,7 +96,7 @@ public class TicketBookingPage extends BaseWindow {
 		this.detailsPanel.add(this.ticketPricevalue);
 		
 		this.detailsPanel.add(this.customerIdLabel);
-		this.detailsPanel.add(this.customerTextField);
+		this.detailsPanel.add(this.customerValueLabel);
 		
 		this.detailsPanel.add(this.createButton);
 		this.detailsPanel.add(this.cancelButton);
@@ -123,32 +127,53 @@ public class TicketBookingPage extends BaseWindow {
 		this.ticketPricevalue = new JLabel(this.seat.calculatePrice()+"$");
 		
 		this.customerIdLabel = new JLabel("Customer Id : ");
-		this.customerTextField = new JTextField(15);
+		this.customerValueLabel = new JLabel("Please Click to select a Customer");
+		this.customerValueLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 		this.createButton = new JButton("Create Button");
 		this.cancelButton = new JButton("Cancel Button");
 		
+		addActionOnCustomerLabel();
 		this.addCreateBtnAction();
 		
 	}
 	
-	public void addCreateBtnAction() {
-		this.createButton.addActionListener(new ActionListener() {
-			
+	public void refreshCustomerValueLabel(Customer selectedCustomer) {
+		this.customer = selectedCustomer;
+		this.customerValueLabel.setText(this.getCustomerNameLabel());
+	}
+	
+	public void addActionOnCustomerLabel() {
+		this.customerValueLabel.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-			int customerid = Integer.parseInt(customerTextField.getText());
-			Customer customer = customerdao.getById(customerid);
-			if(customer != null) {
-			Ticket ticket = new Ticket(flightSchedule, customer, seat, seat.calculatePrice());
-			ticketDaoImpl.create(ticket);
-			JOptionPane.showMessageDialog(baseWindow, "Successfully created Ticket !!!");
-			}
-			else {
-				JOptionPane.showMessageDialog(baseWindow, "Customer ID not found for "+customerid);
-			}
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				selectedCustomerAction();
 			}
 		});
+	}
+	
+	public void selectedCustomerAction() {
+		CustomerListingPage customerListingPage = new CustomerListingPage(this);
+		customerListingPage.call();
+	}
+	
+	public void addCreateBtnAction() {
+		this.createButton.addActionListener(e -> createAction());
+	}
+	
+	public void createAction() {
+		if(customer != null) {
+		Ticket ticket = new Ticket(flightSchedule, customer, seat, seat.calculatePrice());
+		ticketDaoImpl.create(ticket);
+		JOptionPane.showMessageDialog(baseWindow, "Successfully created Ticket !!!");
+		baseWindow.dispose();
+		TicketListingPage ticketListingPage = new TicketListingPage(this);
+		ticketListingPage.refreshTableData();
+		}
+		else {
+			JOptionPane.showMessageDialog(baseWindow, "Customer ID not found for "+customer.getCustomerId());
+		}
 	}
 	
 	public void prepareBaseWindow() {
@@ -157,6 +182,10 @@ public class TicketBookingPage extends BaseWindow {
 		this.setTitle("Ticket Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
+	}
+	
+	public String getCustomerNameLabel() {
+	    return "<html><a href='' style='color: black; text-decoration: none;'>" + customer.getCustomerName() + "</a></html>";
 	}
 	
 	

@@ -10,6 +10,4 @@ public abstract class SeatDao extends AbstractDao<Seat> {
 
 	public abstract boolean isAvailableSeat(int schedule_id, int seat_id);
 	public abstract List<Seat> getAvaiableSeatBySchedule(int scheduleId);
-	public abstract void updateSeat(Seat seat);
-	public abstract void deleteSeat(int seatId);
 }

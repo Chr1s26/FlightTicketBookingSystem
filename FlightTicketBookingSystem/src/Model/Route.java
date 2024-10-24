@@ -8,14 +8,14 @@ public class Route {
 	private int distance;
 	private Flight flight;
 	
-	public Route(int routeId,Airport depature, Airport arrival,int distance) {
+	public Route(int routeId,Airport arrival, Airport depature,int distance) {
 		this.routeId = routeId;
 		this.depatureAirport = depature;
 		this.arrivalAirport = arrival;
 		this.distance = distance;
 	}
 	
-	public Route(Airport depature, Airport arrival,int distance) {
+	public Route(Airport arrival, Airport depature,int distance) {
 		this.depatureAirport = depature;
 		this.arrivalAirport = arrival;
 		this.distance = distance;

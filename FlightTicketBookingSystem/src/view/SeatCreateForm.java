@@ -1,9 +1,12 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,6 +18,7 @@ import javax.swing.LayoutFocusTraversalPolicy;
 
 import Dao.FlightDaoImpl;
 import Dao.SeatDaoImpl;
+import Model.Airport;
 import Model.Flight;
 import Model.Seat;
 
@@ -28,7 +32,7 @@ public class SeatCreateForm extends BaseWindow {
 	private JLabel seatNumberLabel;
 	
 	private JTextField seatTypeValue;
-	private JTextField seatFlightValue;
+	private JLabel seatFlightValue;
 	private JTextField seatNumberValue;
 	
 	private JButton createButton;
@@ -39,6 +43,8 @@ public class SeatCreateForm extends BaseWindow {
 	private SeatDaoImpl seatDao;
 	private FlightDaoImpl flightDao;
 	private SeatListingPage parentPage;
+	
+	private Flight flight;
 	
 	 public SeatCreateForm(SeatListingPage parentPage) {
 		this.seatDao = new SeatDaoImpl();
@@ -52,10 +58,14 @@ public class SeatCreateForm extends BaseWindow {
 
 		seatIdLabel = new JLabel("seat Id");
 		seatIdValue = new JTextField();
+		
 		seatTypeLabel = new JLabel("seat Type");
 		seatTypeValue = new JTextField();
-		seatFlightLabel = new JLabel("Flight Id");
-		seatFlightValue = new JTextField();
+		
+		seatFlightLabel = new JLabel("Flight Name");
+		seatFlightValue = new JLabel(getFlightLabel());
+		seatFlightValue.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
 		seatNumberLabel = new JLabel("Seat Number");
 		seatNumberValue = new JTextField();
 		createButton = new JButton("Create");
@@ -73,9 +83,29 @@ public class SeatCreateForm extends BaseWindow {
 		panel.add(seatNumberValue);
 		panel.add(createButton);
 		panel.add(cancelButton);
-		
+		addActionOnFlightLabel();
 		addActionOnCreateButton();
 		this.baseWindow.add(panel,BorderLayout.NORTH);
+	}
+	
+	public void addActionOnFlightLabel() {
+		this.seatFlightValue.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				selectFlightAction();
+			}
+		});
+	}
+	
+	public void selectFlightAction() {
+		FlightListingPage flightListingPage = new FlightListingPage(this,"seat");
+		flightListingPage.call();
+	}
+	
+	public void refreshFlightValueBtn(Flight selectFlight) {
+		this.flight = selectFlight;
+		this.seatFlightValue.setText(this.flight.getFlightname());
 	}
 	
 	public void addActionOnCreateButton() {
@@ -85,8 +115,6 @@ public class SeatCreateForm extends BaseWindow {
 			public void actionPerformed(ActionEvent e) {
 				int id = Integer.parseInt(seatIdValue.getText());
 				String type = seatTypeValue.getText();
-				int flightid = Integer.parseInt(seatFlightValue.getText());
-				Flight flight = flightDao.getById(flightid);
 				String seatNumber = seatNumberValue.getText();
 				Seat seat = new Seat(id,type,flight,seatNumber);
 				seatDao.create(seat);
@@ -98,9 +126,13 @@ public class SeatCreateForm extends BaseWindow {
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Seat Create Form");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
+	}
+	
+	public String getFlightLabel() {
+		return "<html><a href='' style='color: black; text-decoration: none;'>" + "Please Click to select the flight "+ "</a></html>";
 	}
 }

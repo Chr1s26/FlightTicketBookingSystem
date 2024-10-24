@@ -1,9 +1,0 @@
-package view;
-
-public class ScheduleListingPage extends BaseWindow {
-	
-	public ScheduleListingPage() {
-		super("Flight Schedule Listing");
-		this.baseWindow.setVisible(true);
-	}
-}

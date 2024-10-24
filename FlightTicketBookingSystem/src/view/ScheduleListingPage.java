@@ -22,26 +22,115 @@ public class ScheduleListingPage extends BaseWindow {
 	private FlightScheduleDaoImpl flightScheduleDaoImpl;
 	private JButton getAvaiableSeatBtn;
 	private BaseWindow parentWindow;
-	private JPanel panel ;
+	private JPanel panel;
 	private JButton selectButton;
+	private JButton createButton;
+	private JButton updateButton;
+	private JButton deleteButton;
+	private String type;
+	private String[][] scheduleDataTable;
 	
 	public ScheduleListingPage(BaseWindow parentWindow) {
 		this.parentWindow = parentWindow;
 		initializeSelectComponent();
 	}
 	
-	public ScheduleListingPage() {
-		
+	public ScheduleListingPage(String type) {
+		this.type = type;
 		this.flightScheduleDaoImpl = new FlightScheduleDaoImpl();
-		
+		this.createDataTable(this.getScheduleData(), columns);
+		if(type.equalsIgnoreCase("booking")) {
+			initializeAvaliableSeatBtnComponent();
+		}
+		else {
+			initializeComponent();
+		}
+	}
+	
+	public void initializeAvaliableSeatBtnComponent() {
 		this.getAvaiableSeatBtn = new JButton("Show Avaiable Seats");
 		this.baseWindow.add(this.getAvaiableSeatBtn,BorderLayout.SOUTH);
 		
 		this.addActionAvailableSeatBtn();
 			
-		this.createDataTable(this.getScheduleData(), columns);
+	}
+	
+	public void initializeComponent() {
+		this.createButton = new JButton("Create");
+		this.updateButton = new JButton("Update");
+		this.deleteButton = new JButton("Delete");
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 3));
 		
-		
+		panel.add(createButton);
+		panel.add(updateButton);
+		panel.add(deleteButton);
+
+		this.baseWindow.add(panel, BorderLayout.SOUTH);
+
+		this.addActionOnCreateButton();
+		this.addActionOnUpdateButton();
+		this.addActionOnDeleteButton();
+	}
+	
+	public void addActionOnCreateButton() {
+		this.createButton.addActionListener(e -> scheduleCreateAction());
+	}
+	
+	public void scheduleCreateAction() {
+		ScheduleCreateForm scheduleCreateForm = new ScheduleCreateForm(this);
+	}
+	
+	public void addActionOnUpdateButton() {
+		this.updateButton.addActionListener(e -> scheduleUpdateAction());
+	}
+	
+	public void scheduleUpdateAction() {
+		int selectedRowIndex = getDataTableTemplate().getSelectedRow();
+		int scheduleId = Integer.parseInt(getScheduleData()[selectedRowIndex][0]);
+		new ScheduleUpdateForm(this, scheduleId);
+	}
+	
+	public void addActionOnDeleteButton() {
+		this.deleteButton.addActionListener(e -> handleDeleteAction());
+	}
+
+	private void handleDeleteAction() {
+
+		int selectedRowIndex = getSelectedRow();
+
+		if (selectedRowIndex == -1) {
+			JOptionPane.showMessageDialog(baseWindow, "Please select a schedule to delete.");
+			return;
+		}
+
+		int scheduleId = getScheduleIdFromSelectedRow(selectedRowIndex);
+
+		if (confirmDeletion(scheduleId)) {
+			deleteScheduleAndRefresh(scheduleId);
+		}
+	}
+	
+	public void getAllScheduleData() {
+		List<FlightSchedule> schedules = flightScheduleDaoImpl.getAll();
+		this.scheduleDataTable = getScheduleData();
+	}
+	
+	public void refreshTableData() {
+		this.getAllScheduleData();
+		super.refreshDataTable(scheduleDataTable);
+	}
+
+	private boolean confirmDeletion(int scheduleId) {
+		int response = JOptionPane.showConfirmDialog(baseWindow,
+				"Are you sure you want to delete schedule with ID " + scheduleId + "?", "Confirm Deletion",
+				JOptionPane.YES_NO_OPTION);
+		return response == JOptionPane.YES_OPTION;
+	}
+
+	private void deleteScheduleAndRefresh(int seatId) {
+		flightScheduleDaoImpl.delete(seatId);
+		this.refreshTableData();
 	}
 	
 	public void initializeSelectComponent() {
@@ -82,14 +171,14 @@ public class ScheduleListingPage extends BaseWindow {
 	}
 
 	private void addActionAvailableSeatBtn() {
-		this.getAvaiableSeatBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedRowIndex = getDataTableTemplate().getSelectedRow();
-				int scheduleId = Integer.parseInt(getScheduleData()[selectedRowIndex][0]); 
-				SeatView seatView = new SeatView(scheduleId);
-			}
-		});
+		this.getAvaiableSeatBtn.addActionListener(e -> actionSeatBtn());
+	}
+	
+	public void actionSeatBtn() {
+		int selectedRowIndex = getDataTableTemplate().getSelectedRow();
+		int scheduleId = Integer.parseInt(getScheduleData()[selectedRowIndex][0]); 
+		SeatView seatView = new SeatView(scheduleId);
+		this.baseWindow.setVisible(false);
 	}
 	
 	private int getSelectedRow() {
@@ -102,7 +191,7 @@ public class ScheduleListingPage extends BaseWindow {
 	
 	public void prepareBaseWindow() {
 		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setTitle("Schedule Page");
+		this.setTitle("Schedule Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}
@@ -117,4 +206,6 @@ public class ScheduleListingPage extends BaseWindow {
 		}
 		return scheduleData;
 	}
+	
+	
 }

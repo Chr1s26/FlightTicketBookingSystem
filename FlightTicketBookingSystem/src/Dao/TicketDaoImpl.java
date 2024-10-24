@@ -108,55 +108,6 @@ public class TicketDaoImpl extends TicketDao {
 	}
 
 	@Override
-	public void deleteTicket(int ticketId) {
-		try {
-			String query = "DELETE FROM tickets WHERE id = ?";
-			Connection connection = connectionFactory.createConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setInt(1, ticketId);
-			int rowsAffected = prepareStatement.executeUpdate();
-	        
-	        if (rowsAffected > 0) {
-	            System.out.println("Ticket deleted successfully.");
-	        } else {
-	            System.out.println("No ticket found with the given ID.");
-	        }
-			}catch (SQLException e) {
-				System.out.print("SQL Exception for : "+e.getMessage());
-			}
-			finally {
-				this.connectionFactory.closeConnection();
-			}
-	}
-
-	@Override
-	public void updateTicket(Ticket ticket) {
-		try {
-			String query = "UPDATE tickets SET schedule_id = ?, customer_id = ?, seat_id = ?, price = ? WHERE id = ?";
-			Connection connection = connectionFactory.createConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setInt(1, ticket.getSchedule().getScheduleid());
-			prepareStatement.setInt(2, ticket.getCustomer().getCustomerId());
-			prepareStatement.setInt(3, ticket.getSeat().getSeatid());
-			prepareStatement.setDouble(4, ticket.getTicketprice());
-			prepareStatement.setInt(5, ticket.getTicketId());
-			int rowsAffected = prepareStatement.executeUpdate();
-	        
-	        if (rowsAffected > 0) {
-	            System.out.println("Customer updated successfully.");
-	        } else {
-	            System.out.println("No customer found with the given ID.");
-	        }
-			}catch (SQLException e) {
-				System.out.print("SQL Exception for : "+e.getMessage());
-			}
-			finally {
-				this.connectionFactory.closeConnection();
-			}
-		
-	}
-
-	@Override
 	public String getUpdateQuery() {
 		return "UPDATE tickets SET schedule_id = ?, customer_id = ?, seat_id = ?, price = ? WHERE id = ?";
 	}

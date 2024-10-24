@@ -1,8 +1,0 @@
-package view;
-
-public class ScheduleListingPage extends BaseWindow {
-	
-	public ScheduleListingPage() {
-		this.baseWindow.setVisible(true);
-	}
-}

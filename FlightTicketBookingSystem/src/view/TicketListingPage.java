@@ -17,13 +17,19 @@ import Model.Ticket;
 public class TicketListingPage extends BaseWindow{
 	
 	private TicketDaoImpl ticketDaoImpl;
-	private String[] columns = {"TicketId","CustomerName","SeatName","SeatType","Dept Airport","Arrival Airport"};
+	private String[] columns = {"TicketId","CustomerName","SeatName","SeatType","Dept Airport","Arrival Airport","Price"};
 	private JButton updateButton;
 	private JButton deleteButton;
 	private JPanel panel;
 	
 	public TicketListingPage() {
 		InitializeComponent();
+		this.createDataTable(getTicketData(), columns);
+		this.prepareBaseWindow();
+	}
+	
+	public TicketListingPage(BaseWindow parentWindow) {
+		ticketDaoImpl = new TicketDaoImpl();
 		this.createDataTable(getTicketData(), columns);
 		this.prepareBaseWindow();
 	}
@@ -97,7 +103,7 @@ public class TicketListingPage extends BaseWindow{
 	}
 	
 	public void deleteTicketAndRefresh(int ticketId) {
-		ticketDaoImpl.deleteTicket(ticketId);
+		ticketDaoImpl.delete(ticketId);
 		this.refreshTableData();
 	}
 	
@@ -119,6 +125,7 @@ public class TicketListingPage extends BaseWindow{
 			ticketarray[rowCount][3] = ticket.getSeat().getSeatType();
 			ticketarray[rowCount][4] = ticket.getSchedule().getRoute().getDepatureAirport().getName();
 			ticketarray[rowCount][5] = ticket.getSchedule().getRoute().getArrivalAirport().getName();
+			ticketarray[rowCount][6] = ticket.getTicketprice()+"";
 			rowCount++;
 		}
 		return ticketarray;

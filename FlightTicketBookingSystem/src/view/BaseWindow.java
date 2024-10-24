@@ -23,14 +23,14 @@ public class BaseWindow {
 		this.baseWindow = new JFrame(this.title);
 		this.baseWindow.setLayout(new BorderLayout());
 		this.baseWindow.setLocation(200,300);
-		this.baseWindow.setSize(400,400);
+		this.baseWindow.setSize(453,250);
 		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void createDataTable(String[][] data, String[] column) {
 		this.tableData = data;
 		this.columns = column;
-		this.tableModel = new DefaultTableModel(null,column);
+		this.tableModel = new DefaultTableModel(null,columns);
 		this.dataTableTemplate = new JTable(this.tableModel);
 		this.scrollPane = new JScrollPane(this.dataTableTemplate);
 		this.baseWindow.add(this.scrollPane,BorderLayout.CENTER);

@@ -101,54 +101,6 @@ public class SeatDaoImpl extends SeatDao {
 		return seats;
 	}
 
-	@Override
-	public void updateSeat(Seat seat) {
-		try {
-			String query = "UPDATE seats SET seat_type = ?, flight_id = ?, name = ? WHERE id = ?";
-			Connection connection = connectionFactory.createConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setString(1, seat.getSeatType());
-			prepareStatement.setInt(2, seat.getFlight().getFlightid());
-			prepareStatement.setString(3, seat.getSeatNumber());
-			prepareStatement.setInt(4, seat.getSeatid());
-			int rowsAffected = prepareStatement.executeUpdate();
-	        
-	        if (rowsAffected > 0) {
-	            System.out.println("Customer updated successfully.");
-	        } else {
-	            System.out.println("No customer found with the given ID.");
-	        }
-			}catch (SQLException e) {
-				System.out.print("SQL Exception for : "+e.getMessage());
-			}
-			finally {
-				this.connectionFactory.closeConnection();
-			}
-		
-	}
-
-	@Override
-	public void deleteSeat(int seatId) {
-		try {
-			String query = "DELETE FROM seats WHERE id = ?";
-			Connection connection = connectionFactory.createConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setInt(1, seatId);
-			int rowsAffected = prepareStatement.executeUpdate();
-	        
-	        if (rowsAffected > 0) {
-	            System.out.println("Seat deleted successfully.");
-	        } else {
-	            System.out.println("No seat found with the given ID.");
-	        }
-			}catch (SQLException e) {
-				System.out.print("SQL Exception for : "+e.getMessage());
-			}
-			finally {
-				this.connectionFactory.closeConnection();
-			}
-		
-	}
 
 	@Override
 	public String getUpdateQuery() {

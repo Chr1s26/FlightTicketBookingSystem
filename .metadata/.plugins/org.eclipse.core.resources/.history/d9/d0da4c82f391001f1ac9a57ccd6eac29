@@ -1,0 +1,9 @@
+package view;
+
+public class ScheduleCreateForm {
+	
+	
+	public ScheduleCreateForm(ScheduleListingPage parentPage) {
+		
+	}
+}

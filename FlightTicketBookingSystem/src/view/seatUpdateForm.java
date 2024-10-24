@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,8 +30,8 @@ public class seatUpdateForm extends BaseWindow {
 	private JLabel seatFlightLabel;
 	private JLabel seatNumberLabel;
 	
-	private JTextField seatTypeValue;
-	private JTextField seatFlightValue;
+	private JComboBox<String> seatTypeValue;
+	private JComboBox<Flight> seatFlightValue;
 	private JTextField seatNumberValue;
 	
 	private JButton updateButton;
@@ -42,24 +44,40 @@ public class seatUpdateForm extends BaseWindow {
 	
 	private SeatListingPage parentPage;
 	private Seat seat;
+	private Flight flight;
+	
+	private List<Flight> flights;
+	private Flight[] flightArray;
 	
 	 public seatUpdateForm(SeatListingPage parentPage,int id) {
 		this.seatDao = new SeatDaoImpl();
+		
 		this.seat = seatDao.getById(id);
+		this.flight = seat.getFlight();
+		
 		this.flightDao = new FlightDaoImpl();
 		this.parentPage = parentPage;
+		this.flights = this.flightDao.getAll();
+		flightArray = this.flights.toArray(new Flight[0]);
+		
 		initializeComponent();
+		addActionSeatTypeComboBox();
 		addActionOnupdateButton();
 		prepareBaseWindow();
 	}
 	
 	public void initializeComponent() {
-		seatIdLabel = new JLabel("seat Id");
+		seatIdLabel = new JLabel("seat Id : ");
 		seatIdValue = new JLabel(this.seat.getSeatid()+"");
-		seatTypeLabel = new JLabel("seat Type");
-		seatTypeValue = new JTextField(seat.getSeatType());
+		
+		seatTypeLabel = new JLabel("Select seat Type : ");
+		seatTypeValue = new JComboBox<String>(Seat.SEAT_TYPES);
+		seatTypeValue.setSelectedItem(this.seat.getSeatType());
+		
 		seatFlightLabel = new JLabel("Flight Id");
-		seatFlightValue = new JTextField(seat.getFlight().getFlightid());
+		seatFlightValue = new JComboBox<Flight>(flightArray);
+		seatFlightValue.setSelectedItem(this.flight);
+		
 		seatNumberLabel = new JLabel("Seat Number");
 		seatNumberValue = new JTextField(seat.getSeatNumber());
 		updateButton = new JButton("Update");
@@ -85,21 +103,30 @@ public class seatUpdateForm extends BaseWindow {
 		this.updateButton.addActionListener(e -> seatUpdateAction());
 	}
 	
+	public void addActionSeatTypeComboBox() {
+		this.seatTypeValue.addActionListener(e -> seatTypeSelectAction());
+	}
+	
+	public void seatTypeSelectAction() {
+		String seatType = (String) (seatTypeValue.getSelectedItem());
+		this.seat.setSeatType(seatType);
+	}
+	
 	public void seatUpdateAction() {
-		String type = seatTypeValue.getText();
-		int flightid = Integer.parseInt(seatFlightValue.getText());
-		Flight flight = flightDao.getById(flightid);
+		String type = this.seat.getSeatType();
+		this.flight = (Flight)(seatFlightValue.getSelectedItem());
+		Flight flight = flightDao.getById(this.flight.getFlightid());
 		String seatNumber = seatNumberValue.getText();
 		Seat seat = new Seat(this.seat.getSeatid(),type,flight,seatNumber);
-		seatDao.updateSeat(seat);
+		seatDao.update(seat);
 		JOptionPane.showMessageDialog(baseWindow, "Successfully updated seat !!!");
 		baseWindow.dispose();
 		this.parentPage.refreshTableData();
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Seat Update Form");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}

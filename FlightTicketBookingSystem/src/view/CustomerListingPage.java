@@ -91,8 +91,15 @@ public class CustomerListingPage extends BaseWindow {
 	
 	public void selectedCustomerAndRefresh(int customerId) {
 		Customer selectedCustomer = this.customerDao.getById(customerId);
-		TicketUpdateForm ticketUpdateForm = (TicketUpdateForm)this.parentWindow;
-		ticketUpdateForm.refreshCustomerValueBtn(selectedCustomer);
+		
+		if(this.parentWindow instanceof TicketUpdateForm) {
+			TicketUpdateForm ticketUpdateForm = (TicketUpdateForm)this.parentWindow;
+			ticketUpdateForm.refreshcustomerValueLabel(selectedCustomer);
+		}
+		else if(this.parentWindow instanceof TicketBookingPage) {
+			TicketBookingPage ticketBookingPage = (TicketBookingPage)this.parentWindow;
+			ticketBookingPage.refreshCustomerValueLabel(selectedCustomer);
+		}
 	}
 	
 	public void call() {
@@ -162,7 +169,7 @@ public class CustomerListingPage extends BaseWindow {
 		}
 		
 	private void deleteCustomerAndRefresh(int customerId) {
-			 customerDao.deleteCustomer(customerId);
+			 customerDao.delete(customerId);
 			 this.refreshTableData();
 			}
 	
@@ -181,7 +188,7 @@ public class CustomerListingPage extends BaseWindow {
 	
 	public void prepareBaseWindow() {
 		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.setTitle("Customer Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}

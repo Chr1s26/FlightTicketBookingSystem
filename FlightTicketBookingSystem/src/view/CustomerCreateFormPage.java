@@ -84,8 +84,8 @@ public class CustomerCreateFormPage extends BaseWindow {
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Customer Create Form");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}

@@ -1,0 +1,50 @@
+package view;
+
+import java.util.List;
+
+import javax.swing.JFrame;
+
+import Dao.FlightDaoImpl;
+import Model.Flight;
+
+public class FlightListingPage extends BaseWindow {
+	
+	private String[] columns = {"id","name","number"};
+	private FlightDaoImpl flightDao ;
+	private String[][] flightDataTable;
+	
+	public FlightListingPage() {
+		flightDao = new FlightDaoImpl();
+		this.getAllFlightData();
+		this.createDataTable(flightDataTable, columns);
+	}
+	
+	public void call() {
+		prepareBaseWindow();
+	}
+	
+	public void getAllFlightData() {
+		List<Flight> flights = flightDao.getAll();
+		this.flightDataTable = getFlightStrings(flights);
+	}
+	
+	public String[][] getFlightStrings(List<Flight> flights){
+		
+		String[][] flightArray = new String[flights.size()][columns.length];
+		int rowCount = 0;
+		for(Flight flight : flights) {
+			flightArray[rowCount][0] = flight.getFlightid()+"";
+			flightArray[rowCount][1] = flight.getFlightname();
+			flightArray[rowCount][2] = flight.getFlightNumber();
+			rowCount++;
+		}
+		return flightArray;
+	}
+	
+	public void prepareBaseWindow() {
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Flight Information");
+		this.baseWindow.setSize(800,400);
+		this.baseWindow.setVisible(true);
+	}
+}

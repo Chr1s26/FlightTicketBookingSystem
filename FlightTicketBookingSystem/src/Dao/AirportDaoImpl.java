@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import Model.Airport;
 
-public class AirportDaoImpl extends AirportDao {
+public class AirportDaoImpl extends AbstractDao<Airport> {
 	
 	@Override
 	public String getTableName() {
@@ -39,53 +39,6 @@ public class AirportDaoImpl extends AirportDao {
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}
-	}
-
-	@Override
-	public void updateAirport(Airport airport) {
-		try {
-			String query = "UPDATE airports SET name = ? WHERE id = ?";
-			Connection connection = connectionFactory.createConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setString(1, airport.getName());
-			prepareStatement.setInt(2, airport.getAirportId());
-			int rowsAffected = prepareStatement.executeUpdate();
-	        
-	        if (rowsAffected > 0) {
-	            System.out.println("Airport updated successfully.");
-	        } else {
-	            System.out.println("No airport found with the given ID.");
-	        }
-			}catch (SQLException e) {
-				System.out.print("SQL Exception for : "+e.getMessage());
-			}
-			finally {
-				this.connectionFactory.closeConnection();
-			}
-		
-	}
-
-	@Override
-	public void deleteAirport(int airportId) {
-		try {
-			String query = "DELETE FROM airports WHERE id = ?";
-			Connection connection = connectionFactory.createConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setInt(1, airportId);
-			int rowsAffected = prepareStatement.executeUpdate();
-	        
-	        if (rowsAffected > 0) {
-	            System.out.println("Airport deleted successfully.");
-	        } else {
-	            System.out.println("No airport found with the given ID.");
-	        }
-			}catch (SQLException e) {
-				System.out.print("SQL Exception for : "+e.getMessage());
-			}
-			finally {
-				this.connectionFactory.closeConnection();
-			}
-		
 	}
 
 	@Override

@@ -69,15 +69,15 @@ public class AirportUpdateFormPage extends BaseWindow {
 	public void airportUpdateAction() {
 		String name = airportNameValue.getText();
 		Airport airport = new Airport(this.airport.getAirportId(),name);
-		airportDao.updateAirport(airport);
+		airportDao.update(airport);
 		JOptionPane.showMessageDialog(baseWindow, "Successfully updated Airport !!!");
 		baseWindow.dispose();
 		this.parentPage.refreshTableData();
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Airport Update Form");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}

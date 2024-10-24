@@ -2,6 +2,7 @@ package Model;
 
 public class Seat {
 	
+	public final static String[] SEAT_TYPES = {"First Class","Economy","Business"};
 	private int seatid;
 	private String SeatNumber;
 	private String seatType = "economy";

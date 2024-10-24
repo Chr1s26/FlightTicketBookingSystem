@@ -76,8 +76,8 @@ public class AirportCreateFormPage extends BaseWindow {
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Airport Create Form");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}

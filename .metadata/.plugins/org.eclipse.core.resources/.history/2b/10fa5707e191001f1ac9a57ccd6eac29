@@ -1,0 +1,31 @@
+package view;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class RouteCreateForm {
+	
+	private JLabel routeIdLabel;
+	private JTextField routeIdValueLabel;
+
+	private JLabel arriveAriportLabel;
+	private JComboBox<String> arriveAirportValueLabel;
+	
+	private JLabel deptAirportLabel;
+	private JComboBox<String> deptAirportValueLabel;
+	
+	private JLabel distanceLabel;
+	private JTextField distanceValueLabel;
+	
+	private JButton createButton;
+	private JButton cancelButton;
+	
+	private JPanel panel;
+	
+	public RouteCreateForm(RouteListingPage parentPage) {
+		
+	}
+}

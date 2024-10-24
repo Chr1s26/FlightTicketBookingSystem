@@ -22,14 +22,14 @@ public class AirportListingPage extends BaseWindow {
 	private JButton updateButton;
 	private JButton deleteButton;
 	private JPanel panel;
+	private JButton selectButton;
+	private BaseWindow parentWindow;
+	private String type;
 	
 	public AirportListingPage() {
+		initializeComponent();
 		panel = new JPanel();
 		panel.setLayout(new GridLayout(1,3));
-		airportDao = new AirportDaoImpl();
-		
-		this.createDataTable(getAirportData(), columns);
-		
 		this.createButton = new JButton("Create");
 		this.updateButton = new JButton("Update");
 		this.deleteButton = new JButton("Delete");
@@ -44,6 +44,63 @@ public class AirportListingPage extends BaseWindow {
 		this.addActionOnUpdateButton();
 		this.addActionOnDeleteButton();
 		
+	}
+	
+	public AirportListingPage(BaseWindow parentWindow,String type) {
+		this.type = type;
+		this.parentWindow = parentWindow;
+		initializeComponent();
+		this.selectButton = new JButton("Select");
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(1,1));
+		panel.add(this.selectButton);
+		this.baseWindow.add(panel,BorderLayout.SOUTH);
+		this.addActionOnSelectButton();
+	}
+	
+	public void initializeComponent() {
+		airportDao = new AirportDaoImpl();
+		this.createDataTable(getAirportData(), columns);
+	}
+	
+	public void addActionOnSelectButton() {
+		this.selectButton.addActionListener(e -> selectAction());
+	}
+	
+	public void selectAction() {
+		int selectedRowIndex = getSelectedRow();
+		
+		if (selectedRowIndex == -1) {
+			JOptionPane.showMessageDialog(baseWindow, "Please select a airport to update.");
+			return;
+		}
+		
+		int airportId = getairportIdFromSelectedRow(selectedRowIndex);
+		selectAirportAndRefresh(airportId);
+		this.baseWindow.dispose();
+	}
+	
+	public void selectAirportAndRefresh(int airportId) {
+		Airport selectedAirport = this.airportDao.getById(airportId);
+		
+		if(this.parentWindow instanceof RouteCreateForm) {
+			RouteCreateForm routeCreateForm = (RouteCreateForm)this.parentWindow;
+			if(type.equalsIgnoreCase("arrive")) {
+			routeCreateForm.refreshArriveAirportValueBtn(selectedAirport);
+			}
+			else {
+				routeCreateForm.refreshDeptAirportValueBtn(selectedAirport);
+			}
+		}
+		else if(this.parentWindow instanceof RouteUpdateForm) {
+			RouteUpdateForm routeUpdateForm = (RouteUpdateForm)this.parentWindow;
+			if(type.equalsIgnoreCase("arrive")) {
+			routeUpdateForm.refreshArriveAirportValueBtn(selectedAirport);
+			}
+			else {
+				routeUpdateForm.refreshDeptAirportValueBtn(selectedAirport);
+			}
+		}
 	}
 	
 	public void call() {
@@ -110,7 +167,7 @@ public class AirportListingPage extends BaseWindow {
 		}
 		
 		private void deleteCustomerAndRefresh(int airportId) {
-			 airportDao.deleteAirport(airportId);
+			 airportDao.delete(airportId);
 			 this.refreshTableData();
 			}
 	
@@ -128,7 +185,7 @@ public class AirportListingPage extends BaseWindow {
 	
 	public void prepareBaseWindow() {
 		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.setTitle("Airport Information");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}

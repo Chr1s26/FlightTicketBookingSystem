@@ -60,18 +60,17 @@ public class SeatView extends BaseWindow {
 	}
 	
 	public void addActionBookingTicketBtn() {
-		this.ticketBookingBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedIndex = getDataTableTemplate().getSelectedRow();
-				if(selectedIndex != -1) {
-					int seatId = Integer.parseInt(getSeatsdata()[selectedIndex][0]);
-					TicketBookingPage ticketBookingPage = new TicketBookingPage(flightSchedule.getScheduleid(),seatId);
-				}else {
-					JOptionPane.showMessageDialog(baseWindow, "Please select a seat !!!");
-				}
-			}
-		});
+		this.ticketBookingBtn.addActionListener(e -> actionBookingTicketBtn());
+	}
+
+	private void actionBookingTicketBtn() {
+		int selectedIndex = getDataTableTemplate().getSelectedRow();
+		if(selectedIndex != -1) {
+			int seatId = Integer.parseInt(getSeatsdata()[selectedIndex][0]);
+			TicketBookingPage ticketBookingPage = new TicketBookingPage(flightSchedule.getScheduleid(),seatId);
+			this.baseWindow.setVisible(false);
+		}else {
+			JOptionPane.showMessageDialog(baseWindow, "Please select a seat !!!");
+		}
 	}
 }

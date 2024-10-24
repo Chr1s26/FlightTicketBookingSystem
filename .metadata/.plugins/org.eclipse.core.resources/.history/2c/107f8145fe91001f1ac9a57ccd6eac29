@@ -1,0 +1,165 @@
+package view;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.*;
+
+import Dao.AirportDaoImpl;
+import Model.Airport;
+
+public class AirportListingPage extends BaseWindow {
+
+    private AirportDaoImpl airportDao;
+    private String[] columns = {"Airport Id", "Airport Name"};
+    private JButton createButton, updateButton, deleteButton, selectButton;
+    private JPanel buttonPanel;
+    private BaseWindow parentWindow;
+    private String type;
+
+    public AirportListingPage() {
+        initializeComponent();
+        addButtons();
+        prepareBaseWindow();
+    }
+
+    public AirportListingPage(BaseWindow parentWindow, String type) {
+        this.type = type;
+        this.parentWindow = parentWindow;
+        initializeComponent();
+        addSelectButton();
+        prepareBaseWindow();
+    }
+
+    private void initializeComponent() {
+        airportDao = new AirportDaoImpl();
+        this.createDataTable(getAirportData(), columns);
+    }
+
+    private void addButtons() {
+        createButton = new JButton("Create");
+        updateButton = new JButton("Update");
+        deleteButton = new JButton("Delete");
+
+        // Button styling
+        styleButton(createButton);
+        styleButton(updateButton);
+        styleButton(deleteButton);
+
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.add(createButton);
+        buttonPanel.add(updateButton);
+        buttonPanel.add(deleteButton);
+
+        this.baseWindow.add(buttonPanel, BorderLayout.SOUTH);
+
+        addActionOnCreateButton();
+        addActionOnUpdateButton();
+        addActionOnDeleteButton();
+    }
+
+    private void addSelectButton() {
+        selectButton = new JButton("Select");
+        styleButton(selectButton);
+
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.add(selectButton);
+
+        this.baseWindow.add(buttonPanel, BorderLayout.SOUTH);
+        addActionOnSelectButton();
+    }
+
+    private void styleButton(JButton button) {
+        button.setFont(new Font("Arial", Font.PLAIN, 14));
+        button.setPreferredSize(new Dimension(120, 40)); // Set button size
+        button.setBackground(new Color(70, 130, 180)); // Light blue color
+        button.setForeground(Color.WHITE); // White text color
+        button.setFocusPainted(false);
+    }
+
+    public void refreshTableData() {
+        super.refreshDataTable(getAirportData());
+    }
+
+    private void addActionOnCreateButton() {
+        createButton.addActionListener(e -> airportCreateAction());
+    }
+
+    private void airportCreateAction() {
+        new AirportCreateFormPage(this);
+    }
+
+    private void addActionOnUpdateButton() {
+        updateButton.addActionListener(e -> airportUpdateAction());
+    }
+
+    private void airportUpdateAction() {
+        int selectedRowIndex = getDataTableTemplate().getSelectedRow();
+        int airportId = Integer.parseInt(getAirportData()[selectedRowIndex][0]);
+        new AirportUpdateFormPage(this, airportId);
+    }
+
+    private void addActionOnDeleteButton() {
+        deleteButton.addActionListener(e -> handleDeleteAction());
+    }
+
+    private void handleDeleteAction() {
+        int selectedRowIndex = getSelectedRow();
+
+        if (selectedRowIndex == -1) {
+            JOptionPane.showMessageDialog(baseWindow, "Please select an airport to delete.");
+            return;
+        }
+
+        int airportId = getAirportIdFromSelectedRow(selectedRowIndex);
+
+        if (confirmDeletion(airportId)) {
+            deleteAirportAndRefresh(airportId);
+        }
+    }
+
+    private int getSelectedRow() {
+        return getDataTableTemplate().getSelectedRow();
+    }
+
+    private int getAirportIdFromSelectedRow(int rowIndex) {
+        return Integer.parseInt(getAirportData()[rowIndex][0]);
+    }
+
+    private boolean confirmDeletion(int airportId) {
+        int response = JOptionPane.showConfirmDialog(
+                baseWindow,
+                "Are you sure you want to delete the airport with ID " + airportId + "?",
+                "Confirm Deletion",
+                JOptionPane.YES_NO_OPTION
+        );
+        return response == JOptionPane.YES_OPTION;
+    }
+
+    private void deleteAirportAndRefresh(int airportId) {
+        airportDao.delete(airportId);
+        this.refreshTableData();
+    }
+
+    public String[][] getAirportData() {
+        List<Airport> airports = airportDao.getAll();
+        String[][] airportArray = new String[airports.size()][columns.length];
+        int rowCount = 0;
+        for (Airport airport : airports) {
+            airportArray[rowCount][0] = String.valueOf(airport.getAirportId());
+            airportArray[rowCount][1] = airport.getName();
+            rowCount++;
+        }
+        return airportArray;
+    }
+
+    public void prepareBaseWindow() {
+        this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setTitle("Airport Listing");
+        this.baseWindow.setSize(800, 400);
+        this.baseWindow.setVisible(true);
+    }
+}

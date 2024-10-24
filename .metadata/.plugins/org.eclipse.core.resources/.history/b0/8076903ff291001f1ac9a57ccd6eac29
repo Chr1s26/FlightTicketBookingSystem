@@ -1,0 +1,8 @@
+package view;
+
+public class SchduleUpdateForm {
+	
+	public SchduleUpdateForm(ScheduleListingPage parentPage, int id) {
+		
+	}
+}

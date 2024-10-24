@@ -29,14 +29,15 @@ public class FlightDaoImpl extends AbstractDao<Flight> {
 
 	@Override
 	public String getInsertQuery() {
-		return "INSERT INTO FLIGHTS (name,number) VALUES (?,?)";
+		return "INSERT INTO FLIGHTS (id,name,number) VALUES (?,?,?)";
 	}
 
 	@Override
 	public void prepareParams(PreparedStatement preparedStatement, Flight object) {
 		try {
-			preparedStatement.setString(1, object.getFlightname());
-			preparedStatement.setString(2, object.getFlightNumber());
+			preparedStatement.setInt(1, object.getFlightid());
+			preparedStatement.setString(2, object.getFlightname());
+			preparedStatement.setString(3, object.getFlightNumber());
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		} 

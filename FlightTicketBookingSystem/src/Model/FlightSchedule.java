@@ -107,5 +107,9 @@ public class FlightSchedule {
 		return scheduleTableRow;
 	}
 	
+	public String getScheduleInfo() {
+		return this.flight.getFlightname()+"("+this.flight.getFlightNumber()+")\n"+"Dept : "+route.getDepatureAirport().getName()+"\n Arrive"+this.route.getArrivalAirport().getName()+"\nDept time"+this.deptTime;
+	}
+	
 	
 }

@@ -76,7 +76,7 @@ public class CustomerUpdateForm extends BaseWindow {
 		String name = customerNameValue.getText();
 		String email = customerEmailValue.getText();
 		Customer customer = new Customer(this.customer.getCustomerId(),name, email);
-		customerDao.updateCustomer(customer);
+		customerDao.update(customer);
 		JOptionPane.showMessageDialog(this.baseWindow, "Successful update!!!");
 		baseWindow.dispose();
 		this.parentPage.refreshTableData();
@@ -84,8 +84,8 @@ public class CustomerUpdateForm extends BaseWindow {
 	}
 	
 	public void prepareBaseWindow() {
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("Ticket Information");
+		this.baseWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setTitle("Customer Update Form");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
 	}

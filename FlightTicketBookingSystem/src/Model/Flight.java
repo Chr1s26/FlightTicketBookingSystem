@@ -45,9 +45,17 @@ public class Flight {
 
 	@Override
 	public String toString() {
-		return "flightname=" + flightname + ", FlightNumber=" + FlightNumber ;
+		return "" + flightname + " - " + FlightNumber ;
 				
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Flight flight = (Flight) obj;
+		return this.getFlightid() == flight.getFlightid();
+	}
+	
+	
 	
 
 }

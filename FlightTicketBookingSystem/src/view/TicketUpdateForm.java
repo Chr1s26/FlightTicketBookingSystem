@@ -2,9 +2,12 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,25 +17,27 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutFocusTraversalPolicy;
 
-
+import Dao.FlightScheduleDaoImpl;
 import Dao.TicketDaoImpl;
 import Model.Customer;
+import Model.Flight;
 import Model.FlightSchedule;
 import Model.Seat;
 import Model.Ticket;
 
 public class TicketUpdateForm extends BaseWindow {
+	
 	private JLabel ticketIdLabel;
 	private JLabel ticketIdValue;
 	
 	private JLabel customerLabel;
-	private JButton customerValueBtn;
+	private JLabel customerValueLabel;
 	
 	private JLabel ticketScheduleLabel;
-	private JButton ticketScheduleValueBtn;
+	private JLabel ticketScheduleValueLabel;
 	
 	private JLabel seatLabel;
-	private JButton seatValueBtn;
+	private JLabel seatValueLabel;
 	
 	private JLabel priceLabel;
 	private JTextField priceValue;
@@ -51,11 +56,18 @@ public class TicketUpdateForm extends BaseWindow {
 	private FlightSchedule flightSchedule;
 	private Seat seat;
 	
+	private FlightScheduleDaoImpl flightScheduleDaoImpl;
+	private Flight flight;
+	
 	public TicketUpdateForm(TicketListingPage parentPage,int ticektId) {
 		this.ticketDao = new TicketDaoImpl();
 		this.ticket = this.ticketDao.getById(ticektId);
+		this.seat = this.ticket.getSeat();
+		this.flightScheduleDaoImpl = new FlightScheduleDaoImpl();
 		this.customer = ticket.getCustomer();
+		this.flightSchedule = this.flightScheduleDaoImpl.getById(ticket.getSchedule().getScheduleid());
 		this.parentPage = parentPage;
+		this.flight = this.flightSchedule.getFlight();
 		initializeComponent();
 		prepareBaseWindow();
 	}
@@ -65,13 +77,16 @@ public class TicketUpdateForm extends BaseWindow {
 		ticketIdValue = new JLabel(this.ticket.getTicketId()+"");
 		
 		customerLabel = new JLabel("Customer Name : ");
-		customerValueBtn = new JButton(this.ticket.getCustomer().getCustomerName());
+		customerValueLabel = new JLabel(getCustomerNameLabel());
+		customerValueLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 		ticketScheduleLabel = new JLabel("Schedule Id : ");
-		ticketScheduleValueBtn = new JButton(this.ticket.getSchedule().getScheduleid()+"");
+		ticketScheduleValueLabel = new JLabel(getScheduleValueLabel());
+		ticketScheduleValueLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 		seatLabel = new JLabel("Seat Id : ");
-		seatValueBtn = new JButton(this.ticket.getSeat().getSeatid()+"("+this.ticket.getSeat().getSeatNumber()+")");
+		seatValueLabel = new JLabel(getSeatLabel());
+		seatValueLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 		priceLabel = new JLabel("Ticket Price : ");
 		priceValue = new JTextField(ticket.getTicketprice()+"");
@@ -83,15 +98,15 @@ public class TicketUpdateForm extends BaseWindow {
 		panel.setLayout(new GridLayout(6,2));
 		panel.add(ticketIdLabel);
 		panel.add(ticketIdValue);
-		
+		 
 		panel.add(customerLabel);
-		panel.add(customerValueBtn);
-		
+		panel.add(customerValueLabel);
+		 
 		panel.add(ticketScheduleLabel);
-		panel.add(ticketScheduleValueBtn);
+		panel.add(ticketScheduleValueLabel);
 		
 		panel.add(seatLabel);
-		panel.add(seatValueBtn);
+		panel.add(seatValueLabel);
 		
 		panel.add(priceLabel);
 		panel.add(priceValue);
@@ -99,16 +114,24 @@ public class TicketUpdateForm extends BaseWindow {
 		panel.add(createButton);
 		panel.add(cancelButton);
 		
-		addActionOnUpdateButton();
+		
 		addActionOnCustomerButton();
 		addActionOnTicketSchedule();
 		addActionOnSeatButton();
+		addActionOnUpdateButton();
 		
 		this.baseWindow.add(panel,BorderLayout.NORTH);
 	}
 	
+	
 	public void addActionOnTicketSchedule() {
-		this.ticketScheduleValueBtn.addActionListener(e -> selectScheduleAction() );
+		this.ticketScheduleValueLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				selectScheduleAction();
+			}
+		});
 	}
 	
 	public void selectScheduleAction() {
@@ -118,21 +141,27 @@ public class TicketUpdateForm extends BaseWindow {
 	
 	public void refreshScheduleValueBtn(FlightSchedule selectedSchedule) {
 		this.flightSchedule = selectedSchedule;
-		this.ticketScheduleValueBtn.setText(flightSchedule.getScheduleid()+"");
+		this.ticketScheduleValueLabel.setText(this.getScheduleValueLabel());
 	}
 	
-	public void refreshCustomerValueBtn(Customer selectedCustomer) {
+	public void refreshcustomerValueLabel(Customer selectedCustomer) {
 		this.customer = selectedCustomer;
-		this.customerValueBtn.setText(selectedCustomer.getCustomerName());
+		this.customerValueLabel.setText(this.getCustomerNameLabel());
 	}
 	
-	public void refreshSeatValueBtn(Seat selectedSeat) {
+	public void refreshseatValueLabel(Seat selectedSeat) {
 		this.seat = selectedSeat;
-		this.seatValueBtn.setText(seat.getSeatid()+"");
+		this.seatValueLabel.setText(this.getSeatLabel());
 	}
 	
 	public void addActionOnCustomerButton() {
-		this.customerValueBtn.addActionListener(e -> selectCustomerAction());
+		this.customerValueLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				selectCustomerAction();
+			}
+		});
 	}
 	
 	public void selectCustomerAction() {
@@ -141,11 +170,17 @@ public class TicketUpdateForm extends BaseWindow {
 	}
 	
 	public void addActionOnSeatButton() {
-		this.seatValueBtn.addActionListener(e -> selectSeatAction());
+		this.seatValueLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				selectSeatAction();
+			}
+		});
 	}
 	
 	public void selectSeatAction() {
-		SeatListingPage seatListingPage = new SeatListingPage(this);
+		SeatListingPage seatListingPage = new SeatListingPage(this,this.flightSchedule.getScheduleid());
 		seatListingPage.call();
 	}
 	
@@ -156,8 +191,10 @@ public class TicketUpdateForm extends BaseWindow {
 	public void ticketUpdateAction() {
 		double price = Double.parseDouble(this.priceValue.getText());
 		this.ticket.setCustomer(this.customer);
+		this.ticket.setSchedule(flightSchedule);
+		this.ticket.setSeat(seat);
 		this.ticket.setTicketprice(price);
-		this.ticketDao.updateTicket(ticket);
+		this.ticketDao.update(ticket);
 		JOptionPane.showMessageDialog(baseWindow, "Successfully created Ticket !!!");
 		this.baseWindow.dispose();
 		this.parentPage.refreshTableData();
@@ -168,5 +205,18 @@ public class TicketUpdateForm extends BaseWindow {
 		this.setTitle("Ticket Update Form ");
 		this.baseWindow.setSize(800,400);
 		this.baseWindow.setVisible(true);
+	}
+	
+	public String getCustomerNameLabel() {
+	    return "<html><a href='' style='color: black; text-decoration: none;'>" + customer.getCustomerName() + "</a></html>";
+	}
+
+	
+	public String getScheduleValueLabel() {
+		return "<html><a href= '' style='color: black;text-decoration: none;'>"+this.flightSchedule.getScheduleInfo()+"</a><html>";
+	}
+	
+	public String getSeatLabel() {
+		return "<html><a href= ''style='color: black; text-decoration: none;'>"+this.seat.getSeatid()+"("+this.ticket.getSeat().getSeatNumber()+")"+"</a><html>";
 	}
 }

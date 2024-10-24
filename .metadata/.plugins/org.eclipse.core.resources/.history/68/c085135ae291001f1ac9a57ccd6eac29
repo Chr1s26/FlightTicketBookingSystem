@@ -1,0 +1,134 @@
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import Dao.RouteDaoImpl;
+import Model.Airport;
+import Model.Route;
+
+public class RouteCreateForm extends BaseWindow {
+	
+	private JLabel routeIdLabel;
+	private JTextField routeIdValueLabel;
+
+	private JLabel arriveAriportLabel;
+	private JLabel arriveAirportValueLabel;
+	
+	private JLabel deptAirportLabel;
+	private JLabel deptAirportValueLabel;
+	
+	private JLabel distanceLabel;
+	private JTextField distanceValueLabel;
+	
+	private JButton createButton;
+	private JButton cancelButton;
+	
+	private JPanel panel;
+	
+	private RouteDaoImpl routeDao;
+	
+	private RouteListingPage parentPage;
+	private Route route;
+	private Airport airport1;
+	private Airport airport2;
+	
+	public RouteCreateForm(RouteListingPage parentPage) {
+		this.routeDao = new RouteDaoImpl();
+		this.parentPage = parentPage;
+		initializeComponent();
+		prepareBaseWindow();
+	}
+	
+	public void initializeComponent() {
+		
+		routeIdLabel = new JLabel("Route Id");
+		routeIdValueLabel = new JTextField();
+		
+		arriveAriportLabel = new JLabel("Arrive Airport");
+		arriveAirportValueLabel = new JLabel(getArriveAirportLabel());
+		arriveAirportValueLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
+		deptAirportLabel = new JLabel("Dept Airport");
+		deptAirportValueLabel = new JLabel(getDeptAirportLabel());
+		deptAirportValueLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
+		distanceLabel = new JLabel("Distance");
+		distanceValueLabel = new JTextField();
+		
+		createButton = new JButton("Create");
+		cancelButton = new JButton("Cancel");
+		
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(5,2));
+		panel.add(routeIdLabel);
+		panel.add(routeIdValueLabel);
+		panel.add(arriveAriportLabel);
+		panel.add(arriveAirportValueLabel);
+		panel.add(deptAirportLabel);
+		panel.add(deptAirportValueLabel);
+		panel.add(distanceLabel);
+		panel.add(distanceValueLabel);
+		panel.add(createButton);
+		panel.add(cancelButton);
+		
+		addActionOnCreateButton();
+		this.baseWindow.add(panel,BorderLayout.NORTH);
+	}
+	
+	public void addActionOnArriveAirportLabel() {
+		this.arriveAirportValueLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				selectArriveAirportAction();
+			}
+		});
+	}
+	
+	public void selectArriveAirportAction() {
+		AirportListingPage airportListingPage = new AirportListingPage(this,"arrive");
+		airportListingPage.call();
+	}
+	
+	public void refreshArriveAirportValueBtn(Airport selectArriveAirport) {
+		this.airport1 = selectArriveAirport;
+		this.arriveAirportValueLabel.setText(this.airport1.getName());
+	}
+	
+	public void addActionOnCreateButton() {
+		this.createButton.addActionListener(e -> createAction());
+	}
+	
+	public void createAction() {
+		int id = Integer.parseInt(routeIdLabel.getText());
+		int arriveAirportId = this.airport1.getAirportId();
+	}
+	
+	public void prepareBaseWindow() {
+		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("Seat Information");
+		this.baseWindow.setSize(800,400);
+		this.baseWindow.setVisible(true);
+	}
+	
+	public String getArriveAirportLabel() {
+		return "<html><a href='' style='color: black; text-decoration: none;'>" + "Please Click to select the airport "+ "</a></html>";
+	}
+	
+	public String getDeptAirportLabel() {
+		return "<html><a href='' style='color: black; text-decoration: none;'>" + "Please Click to select the airport "+ "</a></html>";
+	}
+}
