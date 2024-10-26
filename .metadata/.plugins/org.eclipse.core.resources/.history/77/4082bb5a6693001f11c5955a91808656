@@ -78,13 +78,13 @@ public class ScheduleUpdateForm extends BaseWindow {
 		flightIdValue.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 		deptTimeLabel = new JLabel("Dept Time");
-		deptTimeValue = new JTextField(schedule.getDeptTime());
+		deptTimeValue = new JTextField();
 		
 		arriveTimeLabel = new JLabel("Arrive Time");
-		arriveTimeValue = new JTextField(schedule.getArrivalTime());
+		arriveTimeValue = new JTextField();
 		
 		createdAtLabel = new JLabel("Created At");
-		createdAtValue = new JTextField(schedule.getCreatedAt());
+		createdAtValue = new JTextField();
 		
 		updateButton = new JButton("Update");
 		cancelButton = new JButton("Cancel");
