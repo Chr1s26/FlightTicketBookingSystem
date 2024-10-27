@@ -2,9 +2,14 @@ package Dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import Model.Flight;
 import Model.FlightSchedule;
 import Model.Route;
+import util.DateConverter;
 
 public class FlightScheduleDaoImpl extends AbstractDao<FlightSchedule>{
 	
@@ -28,7 +33,9 @@ public class FlightScheduleDaoImpl extends AbstractDao<FlightSchedule>{
 		String depttime = resultset.getString("dept_time");
 		String arrivetime = resultset.getString("arrive_time");
 		String createdAt = resultset.getString("created_at");
-	    flightSchedule = new FlightSchedule(id1,flight, route, depttime, arrivetime, createdAt);}
+	    flightSchedule = new FlightSchedule(id1,flight, route, DateConverter.toDateTimeObj(depttime),DateConverter.toDateTimeObj(arrivetime),DateConverter.toDateTimeObj(createdAt));
+	    }
+		
 		catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}
@@ -46,9 +53,9 @@ public class FlightScheduleDaoImpl extends AbstractDao<FlightSchedule>{
 		try {
 			preparedStatement.setInt(1,flightSchedule.getRoute().getRouteId());
 			preparedStatement.setInt(2,flightSchedule.getFlight().getFlightid());
-			preparedStatement.setString(3,flightSchedule.getDeptTime());
-			preparedStatement.setString(4, flightSchedule.getArrivalTime());
-			preparedStatement.setString(5, flightSchedule.getCreatedAt());
+			preparedStatement.setTimestamp(3,DateConverter.toTimestampObj(flightSchedule.getDeptTime()));
+			preparedStatement.setTimestamp(4, DateConverter.toTimestampObj(flightSchedule.getArrivalTime()));
+			preparedStatement.setTimestamp(5, DateConverter.toTimestampObj(flightSchedule.getCreatedAt()));
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}
@@ -65,9 +72,9 @@ public class FlightScheduleDaoImpl extends AbstractDao<FlightSchedule>{
 		try {
 		preparedStatement.setInt(1,object.getRoute().getRouteId());
 		preparedStatement.setInt(2,object.getFlight().getFlightid());
-		preparedStatement.setString(3,object.getDeptTime());
-		preparedStatement.setString(4, object.getArrivalTime());
-		preparedStatement.setString(5, object.getCreatedAt());
+		preparedStatement.setTimestamp(3,DateConverter.toTimestampObj(object.getDeptTime()));
+		preparedStatement.setTimestamp(4, DateConverter.toTimestampObj(object.getArrivalTime()));
+		preparedStatement.setTimestamp(5, DateConverter.toTimestampObj(object.getCreatedAt()));
 		preparedStatement.setInt(6, object.getScheduleid());
 		}
 		catch (SQLException e) {

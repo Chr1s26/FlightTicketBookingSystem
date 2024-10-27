@@ -1,8 +1,0 @@
-package view;
-
-public class ScheduleUpdateForm {
-	
-	public ScheduleUpdateForm(ScheduleListingPage parentPage, int id) {
-		
-	}
-}

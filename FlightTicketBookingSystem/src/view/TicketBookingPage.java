@@ -115,10 +115,10 @@ public class TicketBookingPage extends BaseWindow {
 		this.SeatNumbervalue = new JLabel(this.seat.getSeatNumber()+"("+this.seat.getSeatType()+")");
 		
 		this.deptTimeLabel = new JLabel("Dept Time : ");
-		this.deptTimevalue = new JLabel(this.flightSchedule.getDeptTime());
+		this.deptTimevalue = new JLabel(this.flightSchedule.getDeptTime().toString());
 		
 		this.arriveTimeLabel = new JLabel("Arrive Time : ");
-		this.arriveTimevalue = new JLabel(this.flightSchedule.getArrivalTime());
+		this.arriveTimevalue = new JLabel(this.flightSchedule.getArrivalTime().toString());
 		
 		this.routeInfoLabel = new JLabel("Route Info : ");
 		this.routeInfoValue = new JLabel(this.flightSchedule.getRoute().getRouteInfo());

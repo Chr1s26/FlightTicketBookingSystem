@@ -55,6 +55,9 @@ public class Flight {
 		return this.getFlightid() == flight.getFlightid();
 	}
 	
+	public String getFlightInfo() {
+		return flightname+"("+FlightNumber+")";
+	}
 	
 	
 

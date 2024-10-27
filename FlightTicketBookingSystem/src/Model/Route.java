@@ -62,7 +62,7 @@ public class Route {
 	}
 	
 	public String getRouteInfo() {
-		return "Dept Location : "+this.depatureAirport.getName()+"To "+this.arrivalAirport.getName()+"("+this.distance+")";
+		return this.depatureAirport.getName()+"To "+this.arrivalAirport.getName()+"("+this.distance+")";
 	}
 
 	@Override
