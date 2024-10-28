@@ -1,17 +1,20 @@
 package Dao;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import Model.Flight;
 import Model.FlightSchedule;
 import Model.Route;
 import util.DateConverter;
 
-public class FlightScheduleDaoImpl extends AbstractDao<FlightSchedule>{
+public class FlightScheduleDaoImpl extends FlightScheduleDao{
 	
 	private RouteDaoImpl routeDao = new RouteDaoImpl();
 	private FlightDaoImpl flightDao = new FlightDaoImpl();
@@ -82,5 +85,33 @@ public class FlightScheduleDaoImpl extends AbstractDao<FlightSchedule>{
 
 		}
 	}
+
+	@Override
+	public List<FlightSchedule> getScheduleByRouteAndFlight(FlightSchedule schedule) {
+		List<FlightSchedule> objects = new ArrayList<FlightSchedule>();
+		try {
+		String query = "SELECT * FROM "+this.getTableName()+" WHERE route_id = ? AND flight_id = ? AND dept_time BETWEEN ? AND ?";
+		Connection connection = this.connectionFactory.createConnection();
+		PreparedStatement preparestatement = connection.prepareStatement(query);
+		preparestatement.setInt(1, schedule.getRoute().getRouteId());
+		preparestatement.setInt(2, schedule.getFlight().getFlightid());
+		preparestatement.setTimestamp(3, DateConverter.toTimestampObj(schedule.getDeptTime().minusHours(5)));
+		preparestatement.setTimestamp(4, DateConverter.toTimestampObj(schedule.getDeptTime().plusHours(5)));
+		ResultSet resultset = preparestatement.executeQuery();
+		while(resultset.next()) {
+			FlightSchedule object  = this.convertToObject(resultset);
+			objects.add(object);
+		}
+		}
+		catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+			
+		}finally {
+			this.connectionFactory.closeConnection();
+		}
+		return objects;
+	}
+
+
 	
 }

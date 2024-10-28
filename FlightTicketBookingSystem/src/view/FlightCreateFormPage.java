@@ -40,9 +40,7 @@ public class FlightCreateFormPage extends BaseWindow{
 	}
 	
 	public void initializeComponent() {
-		
-		flightIdLabel = new JLabel("flight Id");
-		flightIdValue = new JTextField();
+
 		flightNameLabel = new JLabel("flight Name");
 		flightNameValue = new JTextField();
 		flightNumberLabel = new JLabel("flight Number");
@@ -51,9 +49,7 @@ public class FlightCreateFormPage extends BaseWindow{
 		cancelButton = new JButton("Cancel");
 		
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(4,2));
-		panel.add(flightIdLabel);
-		panel.add(flightIdValue);
+		panel.setLayout(new GridLayout(3,2));
 		panel.add(flightNameLabel);
 		panel.add(flightNameValue);
 		panel.add(flightNumberLabel);
@@ -70,10 +66,9 @@ public class FlightCreateFormPage extends BaseWindow{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id = Integer.parseInt(flightIdValue.getText());
 				String name = flightNameValue.getText();
 				String number = flightNumberValue.getText();
-				Flight flight = new Flight(id,name, number);
+				Flight flight = new Flight(name, number);
 				flightDao.create(flight);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created flight !!!");
 				baseWindow.dispose();

@@ -5,9 +5,9 @@ import java.util.List;
 import Model.FlightSchedule;
 import Model.FlightSchedule;
 
-public interface FlightScheduleDao {
+public abstract class FlightScheduleDao extends AbstractDao<FlightSchedule>{
 
-	public abstract void updateFlightSchedule(FlightSchedule flightSchedule);
-	public abstract void deleteFlightSchedule(int flightScheduleId);
+	public abstract List<FlightSchedule> getScheduleByRouteAndFlight(FlightSchedule schedule) ;
+
 
 }

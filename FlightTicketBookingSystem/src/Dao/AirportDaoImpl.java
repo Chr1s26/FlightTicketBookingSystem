@@ -28,14 +28,13 @@ public class AirportDaoImpl extends AbstractDao<Airport> {
 
 	@Override
 	public String getInsertQuery() {
-		return "INSERT INTO AIRPORTS (id,name) VALUES (?,?)";
+		return "INSERT INTO AIRPORTS (name) VALUES (?)";
 	}
 
 	@Override
 	public void prepareParams(PreparedStatement preparedStatement, Airport object) {
 		try {
-			preparedStatement.setInt(1, object.getAirportId());
-			preparedStatement.setString(2, object.getName());
+			preparedStatement.setString(1, object.getName());
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}

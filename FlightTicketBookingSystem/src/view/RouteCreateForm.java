@@ -59,8 +59,6 @@ public class RouteCreateForm extends BaseWindow {
 	
 	public void initializeComponent() {
 		
-		routeIdLabel = new JLabel("Route Id");
-		routeIdValueLabel = new JTextField();
 		
 		arriveAriportLabel = new JLabel("Arrive Airport");
 		arriveAirportValueLabel = new JLabel(getArriveAirportLabel());
@@ -77,9 +75,7 @@ public class RouteCreateForm extends BaseWindow {
 		cancelButton = new JButton("Cancel");
 		
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(5,2));
-		panel.add(routeIdLabel);
-		panel.add(routeIdValueLabel);
+		panel.setLayout(new GridLayout(4,2));
 		panel.add(arriveAriportLabel);
 		panel.add(arriveAirportValueLabel);
 		panel.add(deptAirportLabel);
@@ -140,13 +136,12 @@ public class RouteCreateForm extends BaseWindow {
 	}
 	
 	public void createAction() {
-		int id = Integer.parseInt(routeIdValueLabel.getText());
 		int arriveAirportId = this.airport1.getAirportId();
 		Airport Arriveairport = airportDao.getById(arriveAirportId);
 		int deptAirportId = this.airport2.getAirportId();
 		Airport deptAirport = airportDao.getById(deptAirportId);
 		int distance = Integer.parseInt(distanceValueLabel.getText());
-		Route route = new Route(id,Arriveairport, deptAirport, distance);
+		Route route = new Route(Arriveairport, deptAirport, distance);
 		routeDao.create(route);
 		JOptionPane.showMessageDialog(baseWindow, "Successfully created route !!!");
 		baseWindow.dispose();

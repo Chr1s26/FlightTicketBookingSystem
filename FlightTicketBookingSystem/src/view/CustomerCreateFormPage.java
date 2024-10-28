@@ -42,8 +42,6 @@ public class CustomerCreateFormPage extends BaseWindow {
 	}
 	
 	public void initializeComponent() {
-		customerIdLabel = new JLabel("Customer Id");
-		customerIdValue = new JTextField();
 		customerNameLabel = new JLabel("Customer Name");
 		customerNameValue = new JTextField();
 		customerEmailLabel = new JLabel("Customer Email");
@@ -52,9 +50,7 @@ public class CustomerCreateFormPage extends BaseWindow {
 		cancelButton = new JButton("Cancel");
 		
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(4,4));
-		panel.add(customerIdLabel);
-		panel.add(customerIdValue);
+		panel.setLayout(new GridLayout(3,4));
 		panel.add(customerNameLabel);
 		panel.add(customerNameValue);
 		panel.add(customerEmailLabel);
@@ -71,10 +67,9 @@ public class CustomerCreateFormPage extends BaseWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id = Integer.parseInt(customerIdValue.getText());
 				String name = customerNameValue.getText();
 				String email = customerEmailValue.getText();
-				Customer customer = new Customer(id,name,email);
+				Customer customer = new Customer(name,email);
 				customerDao.create(customer);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created Customer !!!");
 				baseWindow.dispose();

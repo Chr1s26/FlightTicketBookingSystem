@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -33,8 +36,11 @@ import Model.Flight;
 import Model.FlightSchedule;
 import Model.Route;
 import Model.Seat;
+import Service.FlightScheduleCreateService;
+import exception.InvalidFlightScheduleException;
 import util.DateConverter;
 import util.DateLabelFormatter;
+import util.DateUtil;
 
 public class ScheduleCreateForm extends BaseWindow{
 	
@@ -52,9 +58,6 @@ public class ScheduleCreateForm extends BaseWindow{
 	private JDatePanelImpl createdDatePanel;
 	private JDatePickerImpl createdDatePicker;
 	private JSpinner createdTimeSpinner;
-	
-	private JLabel scheduleIdLabel;
-	private JTextField scheduleIdValue;
 	
 	private JLabel routeIdLabel;
 	private JLabel routeIdValue;
@@ -97,8 +100,6 @@ public class ScheduleCreateForm extends BaseWindow{
 	}
 	
 	public void initializeComponent() {
-		scheduleIdLabel = new JLabel("Schedule Id");
-		scheduleIdValue = new JTextField(5);
 		
 		routeIdLabel = new JLabel("Route Id");
 		routeIdValue = new JLabel(getRouteLabel());
@@ -133,9 +134,7 @@ public class ScheduleCreateForm extends BaseWindow{
 		cancelButton = new JButton("Cancel");
 		
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(3,2,40,40));
-		panel.add(scheduleIdLabel);
-		panel.add(scheduleIdValue);
+		panel.setLayout(new GridLayout(2,2,40,40));
 		panel.add(routeIdLabel);
 		panel.add(routeIdValue);
 		panel.add(flightIdLabel);
@@ -185,24 +184,30 @@ public class ScheduleCreateForm extends BaseWindow{
 	
 	
 	public void addActionOnCreateButton() {
-		this.createButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int id = Integer.parseInt(scheduleIdValue.getText());
-				Route routeObj = routeDao.getById(route.getRouteId());
-				Flight flightObj = flightDao.getById(flight.getFlightid());
-				String deptTime = deptTimeValue.getText();
-				String arriveTime = arriveTimeValue.getText();
-				String createdAt = createdAtValue.getText();
-				FlightSchedule schedule = new FlightSchedule(flightObj, routeObj, DateConverter.toDateTimeObj(arriveTime), DateConverter.toDateTimeObj(deptTime), DateConverter.toDateTimeObj(createdAt));
-				flightScheduleDao.create(schedule);
-				JOptionPane.showMessageDialog(baseWindow, "Successfully created schedule !!!");
-				baseWindow.dispose();
-				parentPage.refreshTableData();
-			}
-		});
+		this.createButton.addActionListener(e -> createBtnAction());
 	}
+	
+	public void createBtnAction() {
+		FlightSchedule schedule = new FlightSchedule();
+		schedule.setFlight(this.flight);
+		schedule.setRoute(this.route);
+		
+	    schedule.setArrivalTime(DateUtil.getSelectedDate(this.arriveDatePanel, this.arriveTimeSpinner));
+	    schedule.setDeptTime(DateUtil.getSelectedDate(this.deptDatePanel, this.deptTimeSpinner));
+	    schedule.setCreatedAt(DateUtil.getSelectedDate(this.createdDatePanel, this.createdTimeSpinner));
+		try {
+			new FlightScheduleCreateService(schedule);
+			this.flightScheduleDao.create(schedule);
+			JOptionPane.showMessageDialog(baseWindow, "Successfully created schedule !!!");
+			baseWindow.dispose();
+		}
+		catch (InvalidFlightScheduleException e) {
+			JOptionPane.showMessageDialog(baseWindow,e.getMessage());
+		}
+		
+		parentPage.refreshTableData();
+	}
+	
 	
 	public void addActionOnFlightLabel() {
 		this.flightIdValue.addMouseListener(new MouseAdapter() {
@@ -215,7 +220,7 @@ public class ScheduleCreateForm extends BaseWindow{
 	}
 	
 	public void selectFlightAction() {
-		FlightListingPage flightListingPage = new FlightListingPage(this,"schedule");
+		FlightListingPage flightListingPage = new FlightListingPage(this);
 		flightListingPage.call();
 	}
 	

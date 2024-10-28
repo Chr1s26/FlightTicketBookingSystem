@@ -34,16 +34,15 @@ public class RouteDaoImpl extends AbstractDao<Route> {
 
 	@Override
 	public String getInsertQuery() {
-		return "INSERT INTO ROUTES(id,arrive_airport_id,dept_airport_id,distance) VALUES (?,?,?,?)";
+		return "INSERT INTO ROUTES(arrive_airport_id,dept_airport_id,distance) VALUES (?,?,?)";
 	}
 
 	@Override
 	public void prepareParams(PreparedStatement preparedStatement, Route route) {
 		try {
-			preparedStatement.setInt(1, route.getRouteId());
-			preparedStatement.setInt(2, route.getArrivalAirport().getAirportId());
-			preparedStatement.setInt(3, route.getDepatureAirport().getAirportId());
-			preparedStatement.setInt(4, route.getDistance());
+			preparedStatement.setInt(1, route.getArrivalAirport().getAirportId());
+			preparedStatement.setInt(2, route.getDepatureAirport().getAirportId());
+			preparedStatement.setInt(3, route.getDistance());
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}

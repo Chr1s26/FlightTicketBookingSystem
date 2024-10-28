@@ -30,15 +30,14 @@ public class CustomerDaoImpl extends CustomerDao {
 
 	@Override
 	public String getInsertQuery() {
-		return "INSERT INTO CUSTOMERS (id,name,email) VALUES (?,?,?)";
+		return "INSERT INTO CUSTOMERS (name,email) VALUES (?,?)";
 	}
 
 	@Override
 	public void prepareParams(PreparedStatement preparedStatement,Customer object) {
 		try {
-			preparedStatement.setInt(1, object.getCustomerId());
-			preparedStatement.setString(2, object.getCustomerName());
-			preparedStatement.setString(3, object.getEmail());
+			preparedStatement.setString(1, object.getCustomerName());
+			preparedStatement.setString(2, object.getEmail());
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}

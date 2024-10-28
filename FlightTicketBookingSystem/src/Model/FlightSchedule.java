@@ -11,6 +11,10 @@ public class FlightSchedule {
 	private LocalDateTime arrivalTime;
 	private LocalDateTime createdAt;
 	
+	public FlightSchedule() {
+		
+	}
+	
 	public FlightSchedule(int scheduleid,Flight flight,Route route,LocalDateTime deptTime,LocalDateTime arrivalTime,LocalDateTime createdAt) {
 		this.scheduleid = scheduleid;
 		this.flight = flight;

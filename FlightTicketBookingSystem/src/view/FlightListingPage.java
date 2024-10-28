@@ -24,7 +24,7 @@ public class FlightListingPage extends BaseWindow {
 	private JPanel panel;
 	private BaseWindow parentWindow;
 	private JButton selectButton;
-	private String type;
+	
 	
 	public FlightListingPage() {
 		initializeComponent();
@@ -44,8 +44,8 @@ public class FlightListingPage extends BaseWindow {
 		this.baseWindow.add(panel,BorderLayout.SOUTH);
 	}
 	
-	public FlightListingPage(BaseWindow parentWindow,String type) {
-		this.type = type;
+	public FlightListingPage(BaseWindow parentWindow) {
+	
 		this.parentWindow = parentWindow;
 		initializeComponent();
 		this.selectButton = new JButton("Select");
@@ -81,15 +81,15 @@ public class FlightListingPage extends BaseWindow {
 	
 	public void selectFlightAndRefresh(int flightId) {
 		Flight selectedFlight = this.flightDao.getById(flightId);
-		if(type.equalsIgnoreCase("seat")) {
+		if(this.parentWindow instanceof SeatCreateForm) {
 			SeatCreateForm seatCreateForm = (SeatCreateForm)this.parentWindow;
 			seatCreateForm.refreshFlightValueBtn(selectedFlight);
 		}
-		else if(type.equalsIgnoreCase("schedule")){
+		else if(this.parentWindow instanceof ScheduleCreateForm){
 			ScheduleCreateForm scheduleCreateForm = (ScheduleCreateForm)this.parentWindow;
 			scheduleCreateForm.refreshFlightValueBtn(selectedFlight);
 		}
-		else {
+		else if(this.parentWindow instanceof ScheduleUpdateForm) {
 			ScheduleUpdateForm scheduleUpdateForm = (ScheduleUpdateForm)this.parentWindow;
 			scheduleUpdateForm.refreshFlightValueBtn(selectedFlight);
 		}

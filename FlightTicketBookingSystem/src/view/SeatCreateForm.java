@@ -55,9 +55,6 @@ public class SeatCreateForm extends BaseWindow {
 	}
 	
 	public void initializeComponent() {
-
-		seatIdLabel = new JLabel("seat Id");
-		seatIdValue = new JTextField();
 		
 		seatTypeLabel = new JLabel("seat Type");
 		seatTypeValue = new JTextField();
@@ -72,9 +69,7 @@ public class SeatCreateForm extends BaseWindow {
 		cancelButton = new JButton("Cancel");
 		
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(5,2));
-		panel.add(seatIdLabel);
-		panel.add(seatIdValue);
+		panel.setLayout(new GridLayout(4,2));
 		panel.add(seatTypeLabel);
 		panel.add(seatTypeValue);
 		panel.add(seatFlightLabel);
@@ -99,7 +94,7 @@ public class SeatCreateForm extends BaseWindow {
 	}
 	
 	public void selectFlightAction() {
-		FlightListingPage flightListingPage = new FlightListingPage(this,"seat");
+		FlightListingPage flightListingPage = new FlightListingPage(this);
 		flightListingPage.call();
 	}
 	
@@ -113,10 +108,9 @@ public class SeatCreateForm extends BaseWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id = Integer.parseInt(seatIdValue.getText());
 				String type = seatTypeValue.getText();
 				String seatNumber = seatNumberValue.getText();
-				Seat seat = new Seat(id,type,flight,seatNumber);
+				Seat seat = new Seat(type,flight,seatNumber);
 				seatDao.create(seat);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created seat !!!");
 				baseWindow.dispose();

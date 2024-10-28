@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -33,8 +36,11 @@ import Dao.RouteDaoImpl;
 import Model.Flight;
 import Model.FlightSchedule;
 import Model.Route;
+import Service.FlightScheduleCreateService;
+import exception.InvalidFlightScheduleException;
 import util.DateConverter;
 import util.DateLabelFormatter;
+import util.DateUtil;
 
 public class ScheduleUpdateForm extends BaseWindow {
 	
@@ -114,24 +120,25 @@ public class ScheduleUpdateForm extends BaseWindow {
 		
 		deptTimeLabel = new JLabel("Dept Time");
 		
-		this.deptModel = new SqlDateModel();
+		this.deptModel = new SqlDateModel(DateConverter.toSqlDate(this.schedule.getDeptTime()));
 		this.deptDatePanel = new JDatePanelImpl(deptModel, new Properties());
 		this.deptDatePicker = new JDatePickerImpl(deptDatePanel, new DateLabelFormatter());
-		this.deptTimeSpinner = this.createTimeSpinner();
+		this.deptTimeSpinner = this.createTimeSpinner(DateConverter.toUtilDate(this.schedule.getDeptTime()));
+		
 		
 		arriveTimeLabel = new JLabel("Arrive Time");
 		
-		this.arriveModel = new SqlDateModel();
+		this.arriveModel = new SqlDateModel(DateConverter.toSqlDate(this.schedule.getArrivalTime()));
 		this.arriveDatePanel = new JDatePanelImpl(arriveModel, new Properties());
 		this.arriveDatePicker = new JDatePickerImpl(arriveDatePanel, new DateLabelFormatter());
-		this.arriveTimeSpinner = this.createTimeSpinner();
+		this.arriveTimeSpinner = this.createTimeSpinner(DateConverter.toUtilDate(this.schedule.getArrivalTime()));
 		
 		createdAtLabel = new JLabel("Created At");
 		
-		this.createdModel = new SqlDateModel();
+		this.createdModel = new SqlDateModel(DateConverter.toSqlDate(this.schedule.getCreatedAt()));
 		this.createdDatePanel = new JDatePanelImpl(createdModel, new Properties());
 		this.createdDatePicker = new JDatePickerImpl(createdDatePanel, new DateLabelFormatter());
-		this.createdTimeSpinner = this.createTimeSpinner();
+		this.createdTimeSpinner = this.createTimeSpinner(DateConverter.toUtilDate(this.schedule.getCreatedAt()));
 		
 		updateButton = new JButton("Update");
 		cancelButton = new JButton("Cancel");
@@ -176,13 +183,13 @@ public class ScheduleUpdateForm extends BaseWindow {
 		
 	}
 	
-	public JSpinner createTimeSpinner() {
-	    SpinnerDateModel timeModel = new SpinnerDateModel(new Date(), null, null, Calendar.HOUR_OF_DAY);
+	public JSpinner createTimeSpinner(Date selectedDate) {
+	    SpinnerDateModel timeModel = new SpinnerDateModel(selectedDate, null, null, Calendar.HOUR_OF_DAY);
 	    JSpinner timeSpinner = new JSpinner(timeModel);
 	    JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm");
 	    timeSpinner.setEditor(timeEditor);
 	  
-	    Dimension spinnerSize = new Dimension(10, 10);  // Width: 100, Height: 50
+	    Dimension spinnerSize = new Dimension(10, 10);  
 	    timeSpinner.setPreferredSize(spinnerSize);
 	    
 	    return timeSpinner;
@@ -192,24 +199,32 @@ public class ScheduleUpdateForm extends BaseWindow {
 
 	
 	public void addActionOnUpdateButton() {
-		this.updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int id = schedule.getScheduleid();
-				Route routeObj = routeDao.getById(route.getRouteId());
-				Flight flightObj = flightDao.getById(flight.getFlightid());
-				String deptTime = deptTimeValue.getText();
-				String arriveTime = arriveTimeValue.getText();
-				String createdAt = createdAtValue.getText();
-				FlightSchedule schedules = new FlightSchedule(id,flightObj, routeObj, DateConverter.toDateTimeObj(arriveTime), DateConverter.toDateTimeObj(deptTime), DateConverter.toDateTimeObj(createdAt));
-				flightScheduleDao.update(schedules);
-				JOptionPane.showMessageDialog(baseWindow, "Successfully updated schedule !!!");
-				baseWindow.dispose();
-				parentPage.refreshTableData();
-			}
-		});
+		this.updateButton.addActionListener(e -> updateBtnAction());
 	}
+	
+	private void updateBtnAction() {
+	    this.schedule.setRoute(route);
+	    this.schedule.setFlight(flight);
+
+	    this.schedule.setArrivalTime(DateUtil.getSelectedDate(this.arriveDatePanel, this.arriveTimeSpinner));
+	    this.schedule.setDeptTime(DateUtil.getSelectedDate(this.deptDatePanel, this.deptTimeSpinner));
+	    this.schedule.setCreatedAt(DateUtil.getSelectedDate(this.createdDatePanel, this.createdTimeSpinner));
+	    
+	    try {
+	    	new FlightScheduleCreateService(schedule);
+	    	this.flightScheduleDao.update(schedule);
+	    	  JOptionPane.showMessageDialog(baseWindow, "Successfully updated schedule !!!");
+	  	    baseWindow.dispose();
+		} catch (InvalidFlightScheduleException e) {
+			JOptionPane.showMessageDialog(baseWindow,e.getMessage());
+		}
+	    
+
+	  
+	    parentPage.refreshTableData();
+	}
+
+
 	
 	public void addActionOnFlightLabel() {
 		this.flightIdValue.addMouseListener(new MouseAdapter() {
@@ -222,7 +237,7 @@ public class ScheduleUpdateForm extends BaseWindow {
 	}
 	
 	public void selectFlightAction() {
-		FlightListingPage flightListingPage = new FlightListingPage(this,"scheduleUpdate");
+		FlightListingPage flightListingPage = new FlightListingPage(this);
 		flightListingPage.call();
 	}
 	

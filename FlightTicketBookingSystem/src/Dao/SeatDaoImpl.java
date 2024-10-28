@@ -36,16 +36,15 @@ public class SeatDaoImpl extends SeatDao {
 
 	@Override
 	public String getInsertQuery() {
-		return "INSERT INTO SEATS(id,seat_type,flight_id,name) VALUES(?,?,?,?)";
+		return "INSERT INTO SEATS(seat_type,flight_id,name) VALUES(?,?,?)";
 	}
 
 	@Override
 	public void prepareParams(PreparedStatement preparedStatement, Seat seat) {
 		try {
-			preparedStatement.setInt(1, seat.getSeatid());
-			preparedStatement.setString(2,seat.getSeatType());
-			preparedStatement.setInt(3, seat.getFlight().getFlightid());
-			preparedStatement.setString(4, seat.getSeatNumber());
+			preparedStatement.setString(1,seat.getSeatType());
+			preparedStatement.setInt(2, seat.getFlight().getFlightid());
+			preparedStatement.setString(3, seat.getSeatNumber());
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}

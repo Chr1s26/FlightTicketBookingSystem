@@ -39,17 +39,13 @@ public class AirportCreateFormPage extends BaseWindow {
 	}
 	
 	public void initializeComponent() {
-		airportIdLabel = new JLabel("Airport Id");
-		airportIdValue = new JTextField();
 		airportNameLabel = new JLabel("Airport Name");
 		airportNameValue = new JTextField();
 		createButton = new JButton("Create");
 		cancelButton = new JButton("Cancel");
 		
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(3,3));
-		panel.add(airportIdLabel);
-		panel.add(airportIdValue);
+		panel.setLayout(new GridLayout(2,2));
 		panel.add(airportNameLabel);
 		panel.add(airportNameValue);
 		panel.add(createButton);
@@ -64,9 +60,8 @@ public class AirportCreateFormPage extends BaseWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id = Integer.parseInt(airportIdValue.getText());
 				String name = airportNameValue.getText();
-				Airport airport = new Airport(id,name);
+				Airport airport = new Airport(name);
 				airportDao.create(airport);
 				JOptionPane.showMessageDialog(baseWindow, "Successfully created Airport !!!");
 				baseWindow.dispose();
