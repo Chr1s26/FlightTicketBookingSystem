@@ -50,6 +50,7 @@ public abstract class AbstractDao<T> {
 		return objects;
 	}
 	
+	
 	public T getById(int id)  {
 		T object = null;
 		try {
@@ -86,7 +87,7 @@ public abstract class AbstractDao<T> {
 			this.connectionFactory.closeConnection();
 		}
 	}
-	
+	  
 	public void update(T object) {
 		try {
 			String query = this.getUpdateQuery();
@@ -102,18 +103,20 @@ public abstract class AbstractDao<T> {
 	}
 	
 	public void delete(int id) {
-		try {
-			String query = "Delete From "+this.getTableName()+" where id = ?";
-			Connection connection = this.connectionFactory.createConnection();
-			PreparedStatement prepareStatement = connection.prepareStatement(query);
-			prepareStatement.setInt(1, id);
-			prepareStatement.executeQuery();
-		} catch (SQLException e) {
-			System.out.print("SQL Exception for : "+e.getMessage());
-		}finally {
-			this.connectionFactory.closeConnection();
-		}
+	    try {
+	        String query = "DELETE FROM " + this.getTableName() + " WHERE id = ?";
+	        Connection connection = this.connectionFactory.createConnection();
+	        PreparedStatement prepareStatement = connection.prepareStatement(query);
+	        prepareStatement.setInt(1, id);
+	        prepareStatement.executeUpdate(); 
+	        System.out.println("Record with ID " + id + " deleted successfully.");
+	    } catch (SQLException e) {
+	        System.out.print("SQL Exception: " + e.getMessage());
+	    } finally {
+	        this.connectionFactory.closeConnection();
+	    }
 	}
+
 	
 	
 	

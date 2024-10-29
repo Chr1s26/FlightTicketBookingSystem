@@ -1,0 +1,16 @@
+package Dao;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import Model.User;
+import exception.IncorrectUserNameException;
+
+public abstract class UserDao extends AbstractDao<User> {
+
+	public abstract User getUserByUserName(String username);
+	public abstract User validateUser(String username,String password) throws IncorrectUserNameException;
+	public abstract void updateLoginToken(String token);
+
+}

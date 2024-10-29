@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="deptDatePanel"/>
+		<item key="selection" value="name"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="role"/>
+			<item value="policy"/>
 			<item value="dateDatePanel"/>
 			<item value="seatNumberLabel"/>
 			<item value="flightIdValue"/>
@@ -21,10 +23,10 @@
 			<item value="airport"/>
 			<item value="airport1"/>
 			<item value="customerTextField"/>
-			<item value="seatValueBtn"/>
-			<item value="customerValueBtn"/>
 		</list>
 		<list key="replacehistory">
+			<item value="name"/>
+			<item value="userPolicy"/>
 			<item value="deptDatePanel"/>
 			<item value="flightIdValue"/>
 			<item value="routeIdValue"/>
@@ -38,8 +40,6 @@
 			<item value="seatValueLabel"/>
 			<item value="ticketScheduleValueLabel"/>
 			<item value="customerLabel"/>
-			<item value="ticket"/>
-			<item value="getAirportData"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

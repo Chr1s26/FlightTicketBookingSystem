@@ -50,4 +50,8 @@ public class DateConverter {
 		return Timestamp.valueOf(dateObj);
 	}
 	
+	public static LocalDateTime toLocalDateTime(Timestamp timestamp) {
+		return timestamp.toLocalDateTime();
+	}
+	
 }

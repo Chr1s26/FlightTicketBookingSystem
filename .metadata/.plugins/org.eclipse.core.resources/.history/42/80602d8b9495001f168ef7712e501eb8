@@ -1,0 +1,7 @@
+package Dao;
+
+import Model.UserPolicy;
+
+public abstract class UserPolicyDao extends AbstractDao<UserPolicy> {
+
+}

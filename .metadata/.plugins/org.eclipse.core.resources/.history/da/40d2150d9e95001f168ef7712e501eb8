@@ -1,0 +1,38 @@
+package Service;
+
+import Dao.UserDaoImpl;
+import Model.User;
+import exception.IncorrectPasswordException;
+import exception.IncorrectUserNameException;
+
+public class AuthenticationService {
+	
+	private User currentUser;
+	private UserDaoImpl userDao;
+	
+	public AuthenticationService() {
+		this.userDao = new UserDaoImpl();
+	}
+	
+	public void login(String username, String password) throws IncorrectUserNameException, IncorrectPasswordException {
+		this.currentUser = this.userDao.validateUser(username, password);
+	}
+	
+	
+
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
+	}
+
+	public UserDaoImpl getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDaoImpl userDao) {
+		this.userDao = userDao;
+	}
+}
