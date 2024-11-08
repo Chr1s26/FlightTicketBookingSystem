@@ -193,4 +193,10 @@ public class SeatListingPage extends BaseWindow {
 		this.baseWindow.setSize(800, 400);
 		this.baseWindow.setVisible(true);
 	}
+
+	@Override
+	public void renderPage() {
+		// TODO Auto-generated method stub
+		
+	}
 }

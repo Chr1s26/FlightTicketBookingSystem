@@ -187,6 +187,12 @@ public class TicketBookingPage extends BaseWindow {
 	public String getCustomerNameLabel() {
 	    return "<html><a href='' style='color: black; text-decoration: none;'>" + customer.getCustomerName() + "</a></html>";
 	}
+
+	@Override
+	public void renderPage() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

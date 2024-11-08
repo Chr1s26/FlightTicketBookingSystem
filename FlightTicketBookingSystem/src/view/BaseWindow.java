@@ -2,11 +2,15 @@ package view;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class BaseWindow {
+import Service.AuthenticationService;
+import exception.InvalidTokenException;
+
+public abstract class BaseWindow {
 	public JFrame baseWindow;
 	private String title;
 	private String[][] tableData;
@@ -19,12 +23,21 @@ public class BaseWindow {
 		initializeBaseFrame();
 	}
 	
+	public abstract void renderPage();
+	
 	private void initializeBaseFrame() {
-		this.baseWindow = new JFrame(this.title);
-		this.baseWindow.setLayout(new BorderLayout());
-		this.baseWindow.setLocation(200,300);
-		this.baseWindow.setSize(453,250);
-		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		try {
+    		AuthenticationService.authenticate();
+    		this.baseWindow = new JFrame(this.title);
+    		this.baseWindow.setLayout(new BorderLayout());
+    		this.baseWindow.setLocation(200,300);
+    		this.baseWindow.setSize(453,250);
+    		this.baseWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    		this.renderPage();
+		} catch (InvalidTokenException e) {
+			JOptionPane.showMessageDialog(this.baseWindow, e.getMessage());
+			new LoginWindow();
+		}
 	}
 	
 	public void createDataTable(String[][] data, String[] column) {

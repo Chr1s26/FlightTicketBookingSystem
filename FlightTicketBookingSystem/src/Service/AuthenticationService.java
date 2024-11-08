@@ -17,7 +17,11 @@ public class AuthenticationService {
 	}
 	
 	public static void authenticate() throws InvalidTokenException{
-		userDao.validateLoginToken(currentUser);
+		if(currentUser != null) {
+		userDao.validateLoginToken(currentUser);}
+		else {
+			throw new InvalidTokenException("Unauthorized request!");
+		}
 	}
 
 	public static User getCurrentUser() {

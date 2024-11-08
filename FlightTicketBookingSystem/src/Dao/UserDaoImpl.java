@@ -36,8 +36,7 @@ public class UserDaoImpl extends UserDao {
 			user.setPasswordHash(resultset.getString("password_hash"));
 			user.setPolicy(this.userPolicyDao.getById(resultset.getInt("policy_id")));
 			user.setCreatedAt(DateConverter.toLocalDateTime(resultset.getTimestamp("created_at")));
-			user.setUpdatedAt(DateConverter.toLocalDateTime(resultset.getTimestamp("updated_at")));
-			
+			user.setUpdatedAt(DateConverter.toLocalDateTime(resultset.getTimestamp("update_at")));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -102,6 +101,27 @@ public class UserDaoImpl extends UserDao {
 		}
 		return object;
 	}
+	
+	@Override
+	public User getUserByUserEmail(String email) {
+		User object = null;
+		try {
+			String query = "SELECT * FROM "+this.getTableName()+" WHERE email = ?";
+			Connection connection = connectionFactory.createConnection() ;
+			PreparedStatement prepareStatement = connection.prepareStatement(query);
+			prepareStatement.setString(1, email);
+			ResultSet resultSet = prepareStatement.executeQuery();
+			if(resultSet.next()) {
+				object = this.convertToObject(resultSet);
+			}
+		} catch (SQLException e) {
+			System.out.print("SQL Exception for : "+e.getMessage());
+		}
+		finally {
+			this.connectionFactory.closeConnection();
+		}
+		return object;
+	}
 
 	@Override
 	public User validateUser(String username, String password) throws IncorrectUserNameException, IncorrectPasswordException {
@@ -132,6 +152,7 @@ public class UserDaoImpl extends UserDao {
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, user.getLoginToken());
 			preparedStatement.setInt(2, user.getId());
+			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
 		}finally {
@@ -140,7 +161,7 @@ public class UserDaoImpl extends UserDao {
 	}	
 
 	@Override
-	public User validateLoginToken(User user) throws InvalidTokenException {
+	public void validateLoginToken(User user) throws InvalidTokenException {
 		User object = null;
 		try {
 			String query = "SELECT * FROM "+this.getTableName()+" WHERE username = ? AND login_token = ?";
@@ -154,9 +175,6 @@ public class UserDaoImpl extends UserDao {
 				if(object == null) {
 					throw new InvalidTokenException("Invalid Token for: "+user.getLoginToken());
 				}
-				else {
-					return object;
-				}
 			}
 		} catch (SQLException e) {
 			System.out.print("SQL Exception for : "+e.getMessage());
@@ -164,6 +182,5 @@ public class UserDaoImpl extends UserDao {
 		finally {
 			this.connectionFactory.closeConnection();
 		}
-		return object;
 	}
 }

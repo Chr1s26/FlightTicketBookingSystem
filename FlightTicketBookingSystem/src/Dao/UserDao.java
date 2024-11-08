@@ -14,6 +14,7 @@ public abstract class UserDao extends AbstractDao<User> {
 	public abstract User getUserByUserName(String username);
 	public abstract User validateUser(String username,String password) throws IncorrectUserNameException , IncorrectPasswordException;
 	public abstract void updateLoginToken(User user);
-	public abstract User validateLoginToken(User user)throws InvalidTokenException;
+	public abstract void validateLoginToken(User user)throws InvalidTokenException;
+	public abstract User getUserByUserEmail(String email);
 
 }

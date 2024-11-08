@@ -17,6 +17,7 @@ import Service.AuthenticationService;
 import exception.IncorrectPasswordException;
 import exception.IncorrectUserNameException;
 import exception.InvalidTokenException;
+import util.TokenUtil;
 
 public class LoginWindow {
 
@@ -26,12 +27,13 @@ public class LoginWindow {
 	private JLabel passLabel;
 	private JPasswordField passField;
 	private JButton loginButton;
-	private JButton resetButton;
+	private JButton signUpButton;
 
 	public LoginWindow() {
 		initializeComponents();
 		setupLayout();
 		setupLoginButtonAction();
+		setUpSignUpButtonAction();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
@@ -42,10 +44,9 @@ public class LoginWindow {
 			public void actionPerformed(ActionEvent e) {
 				String username = userTextField.getText();
 				String password = new String(passField.getPassword());
-				
 				try {
 				AuthenticationService.login(username,password);
-				LoginWindow homePage = new LoginWindow();
+				new HomeView();
 				}
 				
 				catch (IncorrectPasswordException e2) {
@@ -57,6 +58,14 @@ public class LoginWindow {
 							JOptionPane.ERROR_MESSAGE);
 				}} });
 }
+	
+	private void setUpSignUpButtonAction() {
+		this.signUpButton.addActionListener(e -> signUpButtonAction());
+	}
+	
+	public void signUpButtonAction() {
+		new SignUpPage();
+	}
 
 	private void initializeComponents() {
 		this.frame = new JFrame("Login Window");
@@ -65,7 +74,7 @@ public class LoginWindow {
 		this.passLabel = new JLabel("Password:");
 		this.passField = new JPasswordField(15);
 		this.loginButton = new JButton("Login");
-		this.resetButton = new JButton("Reset");
+		this.signUpButton = new JButton("Sign up");
 
 	}
 
@@ -102,7 +111,7 @@ public class LoginWindow {
 
 		constraints.gridx = 1;
 
-		frame.add(this.resetButton, constraints);
+		frame.add(this.signUpButton, constraints);
 
 	}
 

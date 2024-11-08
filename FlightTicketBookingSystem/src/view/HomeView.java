@@ -5,7 +5,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
+
+import Service.AuthenticationService;
+import exception.InvalidTokenException;
+
 import java.awt.Insets;
 import javax.swing.UIManager;
 
@@ -27,12 +32,18 @@ public class HomeView extends BaseWindow {
     private JMenuItem routeMenuListing;
     private JMenu scheduleMenu;
     private JMenuItem scheduleMenuListing;
+    
 
     public HomeView() {
-        this.initializeHomeViewComponent();
+    	renderPage();
+    }
+    
+    @Override
+	public void renderPage() {
+		this.initializeHomeViewComponent();
         this.setTitle("Home View");
         this.baseWindow.setVisible(true);
-    }
+	}
 
     public void initializeHomeViewComponent() {
        
@@ -187,4 +198,6 @@ public class HomeView extends BaseWindow {
             }
         });
     }
+
+	
 }

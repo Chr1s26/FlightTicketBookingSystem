@@ -73,4 +73,10 @@ public class SeatView extends BaseWindow {
 			JOptionPane.showMessageDialog(baseWindow, "Please select a seat !!!");
 		}
 	}
+
+	@Override
+	public void renderPage() {
+		// TODO Auto-generated method stub
+		
+	}
 }

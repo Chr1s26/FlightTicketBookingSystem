@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;view.SignInpage.java&apos; to &apos;SignUpPage.java&apos;&#x0D;&#x0A;- Original project: &apos;FlightTicketBookingSystem&apos;&#x0D;&#x0A;- Original element: &apos;view.SignInpage.java&apos;&#x0D;&#x0A;- Renamed element: &apos;view.SignUpPage.java&apos;" description="Rename compilation unit &apos;SignInpage.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;view{SignInpage.java" name="SignUpPage.java" references="false" stamp="1730249225033" version="1.0"/>
+</session>

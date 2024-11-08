@@ -12,38 +12,53 @@ public class UserPolicyDaoImpl extends UserPolicyDao {
 
 	@Override
 	public String getTableName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "user_policies";
 	}
 
 	@Override
 	public UserPolicy convertToObject(ResultSet resultset) {
-		// TODO Auto-generated method stub
-		return null;
+		UserPolicy userPolicy = new UserPolicy();
+		try {
+			userPolicy.setId(resultset.getInt("id"));;
+			userPolicy.setname(resultset.getString("name"));
+			userPolicy.setDescription(resultset.getString("description"));;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userPolicy;
 	}
 
 	@Override
 	public String getInsertQuery() {
-		// TODO Auto-generated method stub
-		return null;
+	
+		return "Insert Into "+this.getTableName()+" (name,description) Values (?,?)";
 	}
 
 	@Override
 	public String getUpdateQuery() {
-		// TODO Auto-generated method stub
-		return null;
+		return "update "+this.getTableName()+" set name = ?, description = ? where id = ?";
 	}
 
 	@Override
 	public void prepareParams(PreparedStatement preparedStatement, UserPolicy object) {
-		// TODO Auto-generated method stub
+		try {
+			preparedStatement.setString(1, object.getname());
+			preparedStatement.setString(2, object.getDescription());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void prepareParamsForUpdate(PreparedStatement preparedStatement, UserPolicy object) {
-		// TODO Auto-generated method stub
-		
+		try {
+			preparedStatement.setString(1, object.getname());
+			preparedStatement.setString(2, object.getDescription());
+			preparedStatement.setInt(3, object.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
